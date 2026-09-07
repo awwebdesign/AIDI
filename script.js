@@ -272,7 +272,6 @@
   function initHero() {
     var hero = $('.hero');
     if (!hero) return;
-    if (reduced.matches) { countFacts(hero); return; }
 
     hero.classList.add('is-armed');
     var release = function () {
@@ -311,8 +310,8 @@
      a tab hands control to the visitor and stops the rotation for good, which
      is also the pause mechanism WCAG 2.2.2 asks for. */
 
-  var ROTATE_MS = 4600;
-  var ROTATE_MS_CALM = 7000;
+  var ROTATE_MS = 2900;
+  var ROTATE_MS_CALM = 3600;
 
   function rotateMs() { return reduced.matches ? ROTATE_MS_CALM : ROTATE_MS; }
 
@@ -356,7 +355,7 @@
           img.src = src;
           img.alt = alt;
           nextImg.classList.remove('is-in');
-        }, 520);
+        }, 340);
       };
       pre.onerror = function () { img.src = src; img.alt = alt; };
       pre.src = src;
@@ -617,19 +616,60 @@
      print job all show the full page instead of blank sections. A timer
      backstops the observer regardless. */
 
+  /* Text arrives in two registers, so the page does not repeat one identical
+     entrance: the page title wipes up out of a mask, while a section's
+     heading and its lede rise softly a beat apart. */
+  function tagTextReveals() {
+    $$('.rv-mask').forEach(function (el) {
+      if (el.closest('.hero')) return;
+      el.setAttribute('data-rise-mask', '');
+    });
+
+    $$('.head__text').forEach(function (head) {
+      var i = 0;
+      $$(':scope > h2, :scope > .lede, :scope > p', head).forEach(function (el) {
+        if (el.hasAttribute('data-rise')) return;
+        el.setAttribute('data-rise', '');
+        el.style.setProperty('--delay', (i * 90) + 'ms');
+        i++;
+      });
+    });
+  }
+
   function initReveal() {
+    tagTextReveals();
     var targets = $$('[data-rise]');
+    var masks = $$('[data-rise-mask]');
     var bars = $$('.macro__track[data-reveal]');
-    if (reduced.matches || !('IntersectionObserver' in window)) return;
+    if (!('IntersectionObserver' in window)) return;
 
     var fold = window.innerHeight * 0.92;
     var below = function (el) { return el.getBoundingClientRect().top > fold; };
+    var above = function (el) { return !below(el); };
+
+    /* A page title sits above the fold by definition, so it can never be
+       revealed by scrolling. Those play once on load instead, the same way
+       the hero does. */
+    var onLoad = masks.filter(above).concat(targets.filter(function (el) {
+      return above(el) && el.closest('.pagehead, .head__text');
+    }));
+    if (onLoad.length) {
+      onLoad.forEach(function (el) {
+        el.classList.add(el.hasAttribute('data-rise-mask') ? 'wipe' : 'rise');
+      });
+      var playIn = function () { onLoad.forEach(function (el) { el.classList.add('is-in'); }); };
+      requestAnimationFrame(function () { requestAnimationFrame(playIn); });
+      setTimeout(playIn, 1200);
+      window.addEventListener('beforeprint', playIn);
+    }
 
     var risers = targets.filter(below);
+    var wipes = masks.filter(below);
     var clips = bars.filter(below);
-    if (!risers.length && !clips.length) return;
+    if (!risers.length && !clips.length && !wipes.length) return;
 
     risers.forEach(function (el) { el.classList.add('rise'); });
+    wipes.forEach(function (el) { el.classList.add('wipe'); });
     clips.forEach(function (el) { el.classList.add('clip'); });
 
     /* Stagger inside a single group, so one list enters together rather than
@@ -648,10 +688,10 @@
       });
     }, { rootMargin: '0px 0px -6% 0px', threshold: 0.08 });
 
-    risers.concat(clips).forEach(function (el) { io.observe(el); });
+    risers.concat(wipes, clips).forEach(function (el) { io.observe(el); });
 
     var release = function () {
-      risers.concat(clips).forEach(function (el) { el.classList.add('is-in'); });
+      risers.concat(wipes, clips).forEach(function (el) { el.classList.add('is-in'); });
     };
     setTimeout(release, 2500);
     window.addEventListener('beforeprint', release);

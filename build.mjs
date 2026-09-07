@@ -55,6 +55,10 @@ const nl = (path) => path.split('.').reduce((o, k) => (o == null ? o : o[k]), NL
 const T = (key, tag = 'span', attrs = '') =>
   `<${tag} data-i18n="${key}"${attrs ? ' ' + attrs : ''}>${esc(nl(key))}</${tag}>`;
 
+/* Heading wrapped in a mask so it can wipe up on arrival. */
+const TMask = (key, tag = 'h1', cls = '') =>
+  `<${tag} class="rv-mask${cls ? ' ' + cls : ''}"><span data-i18n="${key}">${esc(nl(key))}</span></${tag}>`;
+
 const N = (value, dec = 1) =>
   `<span data-num="${value}" data-dec="${dec}">${num(value, dec)}</span>`;
 
@@ -384,7 +388,7 @@ function pagehead(key, crumbLabel, narrow = false) {
         <span aria-hidden="true">/</span>
         <span data-i18n="nav.${crumbLabel}">${esc(nl('nav.' + crumbLabel))}</span>
       </nav>
-      ${T(key + '.h1', 'h1')}
+      ${TMask(key + '.h1')}
       ${T(key + '.lede', 'p', 'class="lede"')}
     </div>
   </section>`;
