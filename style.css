@@ -1,10 +1,10 @@
 @charset "UTF-8";
 /* =============================================================================
-   AIDI — Team Noël-Willockx
+   AIDI, Team Noël-Willockx
    Design system. White and blue, committed.
 
    The idea: AIDI publishes analytical values nobody else in pigeon sport
-   publishes, so the data is the visual system — macro bars, spec readouts and
+   publishes, so the data is the visual system, macro bars, spec readouts and
    tabular figures carry the brand, not decoration.
    ========================================================================== */
 
@@ -29,8 +29,10 @@
   --navy-deep:  oklch(0.265 0.070 264);
   --navy-ink:   oklch(0.185 0.050 264);
 
-  /* Signal — the one saturated accent. */
-  --signal:      oklch(0.600 0.185 250);
+  /* Signal, the one saturated accent. */
+  /* Darkened from L 0.60 so white text on a signal-filled button or badge
+     clears 4.5:1 rather than sitting at 3.9:1. */
+  --signal:      oklch(0.555 0.185 250);
   --signal-ink:  oklch(0.475 0.170 254);
   --signal-lift: oklch(0.720 0.145 246);
 
@@ -70,12 +72,12 @@
   --r-lg: 16px;
   --r-xl: 24px;
 
-  /* Elevation — blue-tinted, never grey */
+  /* Elevation, blue-tinted, never grey */
   --shadow-1: 0 1px 2px oklch(0.42 0.09 264 / 0.06), 0 2px 8px oklch(0.42 0.09 264 / 0.05);
   --shadow-2: 0 2px 6px oklch(0.42 0.09 264 / 0.07), 0 12px 34px oklch(0.42 0.09 264 / 0.09);
   --shadow-3: 0 4px 12px oklch(0.30 0.08 264 / 0.13), 0 28px 64px oklch(0.30 0.08 264 / 0.16);
 
-  /* Motion — exponential ease-out, no bounce */
+  /* Motion, exponential ease-out, no bounce */
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
   --t-fast: 140ms;
@@ -125,7 +127,9 @@ body {
   font-variant-numeric: tabular-nums;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  overflow-x: hidden;
+  /* clip, not hidden: `overflow-x: hidden` makes the body a scroll container,
+     which stops scroll events reaching window and breaks the sticky header. */
+  overflow-x: clip;
 }
 
 h1, h2, h3, h4 {
@@ -253,9 +257,11 @@ button { cursor: pointer; }
   align-items: center;
   gap: clamp(0.75rem, 2vw, 2rem);
   height: 4.5rem;
-  transition: height var(--t) var(--ease);
 }
-.masthead[data-stuck='true'] .masthead__bar { height: 3.9rem; }
+/* The bar keeps a constant height and the wordmark scales instead: a
+   transform stays off the layout path, where animating height would not. */
+.brand img { transition: transform var(--t) var(--ease); transform-origin: left center; }
+.masthead[data-stuck='true'] .brand img { transform: scale(0.88); }
 
 .brand { display: flex; align-items: center; gap: 0.7rem; text-decoration: none; flex: none; }
 .brand img { width: clamp(84px, 8vw, 106px); }
@@ -578,7 +584,14 @@ button { cursor: pointer; }
   color: #fff;
   text-shadow: 0 1px 14px oklch(0.185 0.05 264 / 0.85);
 }
-.analyser__name h3 { font-size: clamp(1.25rem, 1.05rem + 0.75vw, 1.7rem); }
+.analyser__product {
+  margin: 0;
+  font-size: clamp(1.25rem, 1.05rem + 0.75vw, 1.7rem);
+  font-weight: 700;
+  font-stretch: 108%;
+  letter-spacing: -0.022em;
+  line-height: 1.1;
+}
 .analyser__name p { font-size: var(--micro); margin: 0.2rem 0 0; opacity: 0.85; }
 .analyser__figure::after {
   content: '';
@@ -608,19 +621,55 @@ button { cursor: pointer; }
   line-height: 1.15;
 }
 
-.analyser__tabs { display: flex; gap: 0.3rem; padding: 0 1.15rem 1.1rem; }
+/* The tab strip is also the progress bar: the active segment fills over the
+   rotation interval, so the panel visibly advances on its own instead of
+   looking like a static image with three hairlines under it. */
+.analyser__tabs { display: flex; gap: 0.3rem; padding: 0 1.15rem 0.9rem; }
 .analyser__tab {
+  position: relative;
   flex: 1;
-  height: 3px;
   min-width: 0;
+  height: 0.85rem;
   padding: 0;
   border: 0;
+  background: none;
+  cursor: pointer;
+}
+/* The visible rail, drawn as a pseudo-element so the button keeps a
+   comfortable hit area without a fat bar. */
+.analyser__tab::before {
+  content: '';
+  position: absolute; left: 0; right: 0; top: 50%;
+  height: 3px; margin-top: -1.5px;
   border-radius: 99px;
-  background: var(--rule);
+  background: oklch(1 0 0 / 0.2);
   transition: background-color var(--t) var(--ease);
 }
-.analyser__tab[aria-selected='true'] { background: var(--signal-lift); }
-.analyser__tab:focus-visible { outline-offset: 5px; }
+.analyser__tab:hover::before { background: oklch(1 0 0 / 0.34); }
+.analyser__fill {
+  position: absolute; left: 0; right: 0; top: 50%;
+  height: 3px; margin-top: -1.5px;
+  border-radius: 99px;
+  background: var(--signal-lift);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+.analyser__tab[aria-selected='true']::before { background: oklch(1 0 0 / 0.28); }
+.analyser__tab:focus-visible { outline-offset: 2px; border-radius: var(--r-sm); }
+
+/* Once a visitor picks a mix the rotation stops, so the strip becomes a plain
+   set of markers with the chosen one filled. */
+.analyser[data-manual='true'] .analyser__tab[aria-selected='true'] .analyser__fill { transform: scaleX(1); }
+
+/* Crossfade layer for the product photograph. */
+.analyser__figure { position: relative; }
+.analyser__next {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover;
+  opacity: 0; pointer-events: none;
+  transition: opacity 520ms var(--ease);
+}
+.analyser__next.is-in { opacity: 1; }
 
 /* --------------------------------------------------------- 10. macro bar -- */
 /* Stacked proportion of fat / protein / carbohydrate. Segment widths are set
@@ -877,7 +926,7 @@ button { cursor: pointer; }
 }
 
 .detail-block + .detail-block { margin-top: 1.5rem; }
-.detail-block h4 { margin-bottom: 0.55rem; }
+.detail-block h3 { font-size: var(--h4); line-height: 1.3; letter-spacing: -0.008em; font-stretch: 100%; margin-bottom: 0.55rem; }
 .ingredients { font-size: var(--small); line-height: 1.6; color: var(--ink-2); }
 
 /* ------------------------------------------------------ 14. compare table -- */
@@ -918,7 +967,7 @@ th[aria-sort] .sortable svg { opacity: 1; }
 th[aria-sort='ascending'] .sortable svg { transform: rotate(180deg); }
 
 /* ---------------------------------------------------------- 15. sequence -- */
-/* The season, as a real ordered sequence — the one place numbering earns its
+/* The season, as a real ordered sequence, the one place numbering earns its
    keep, because the order is the information. */
 .season { display: grid; border: 1px solid var(--rule); border-radius: var(--r-lg); overflow: hidden; background: var(--bg); }
 @media (min-width: 780px) { .season { grid-template-columns: repeat(4, 1fr); } }
@@ -977,6 +1026,9 @@ th[aria-sort='ascending'] .sortable svg { transform: rotate(180deg); }
 .split { display: grid; gap: clamp(2rem, 4vw, 3.75rem); align-items: center; }
 @media (min-width: 900px) { .split { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
 @media (min-width: 900px) { .split--wide-media { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); } }
+/* When the text column is much taller than the photo, centring strands the
+   image in whitespace; align it to the top of the copy instead. */
+.split--top { align-items: start; }
 
 .media {
   border-radius: var(--r-xl);
@@ -1048,7 +1100,7 @@ th[aria-sort='ascending'] .sortable svg { transform: rotate(180deg); }
   margin-bottom: 1.15rem;
   border-bottom: 2px solid var(--ink);
 }
-.country-head h3 { font-size: 1.32rem; }
+.country-head h2 { font-size: 1.32rem; }
 .country-head span { font-size: var(--small); color: var(--ink-3); }
 
 .dealers { display: grid; gap: 0.85rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17.5rem), 1fr)); }
@@ -1061,7 +1113,7 @@ th[aria-sort='ascending'] .sortable svg { transform: rotate(180deg); }
 }
 .dealer:hover { border-color: var(--navy); box-shadow: var(--shadow-1); }
 .dealer[hidden] { display: none; }
-.dealer h4 { color: var(--ink); }
+.dealer h3 { font-size: var(--h4); line-height: 1.3; letter-spacing: -0.008em; font-stretch: 100%; color: var(--ink); }
 .dealer address { font-style: normal; margin-top: 0.4rem; font-size: var(--small); line-height: 1.55; color: var(--ink-3); }
 .dealer__links { display: flex; flex-wrap: wrap; gap: 0.35rem 1rem; margin-top: 0.65rem; font-size: var(--small); }
 .dealer__links a { font-weight: 550; }
@@ -1171,7 +1223,7 @@ th[aria-sort='ascending'] .sortable svg { transform: rotate(180deg); }
   padding: 2px;
 }
 
-.footer h4 { font-size: var(--micro); letter-spacing: 0.075em; text-transform: uppercase; color: var(--fg-3); font-weight: 700; margin-bottom: 0.9rem; }
+.footer__h { font-size: var(--micro); letter-spacing: 0.075em; text-transform: uppercase; color: var(--fg-3); font-weight: 700; margin-bottom: 0.9rem; }
 .footer__links { display: grid; gap: 0.5rem; }
 .footer__links a { font-size: var(--small); color: var(--fg-2); text-decoration: none; transition: color var(--t-fast) var(--ease); }
 .footer__links a:hover { color: var(--fg); text-decoration: underline; }
@@ -1211,13 +1263,18 @@ th[aria-sort='ascending'] .sortable svg { transform: rotate(180deg); }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  *, *::before, *::after {
+  /* Scoped so the design-proposal pages can preview the motion on a machine
+     where the OS has effects switched off. Nothing on the live site sets
+     data-motion, so visitors always get the reduced treatment. */
+  :root:not([data-motion='on']) *,
+  :root:not([data-motion='on']) *::before,
+  :root:not([data-motion='on']) *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  .rise, .rise.is-in { opacity: 1; transform: none; }
-  .macro__track.clip { clip-path: inset(0 0 0 0 round 99px); }
+  :root:not([data-motion='on']) .rise, .rise.is-in { opacity: 1; transform: none; }
+  :root:not([data-motion='on']) .macro__track.clip { clip-path: inset(0 0 0 0 round 99px); }
   .analyser__dot { animation: none; }
 }
 
@@ -1327,3 +1384,111 @@ table.compare--slim { min-width: 28rem; }
 .contact-card > p { margin-top: 0.7rem; font-size: var(--small); line-height: 1.6; color: var(--ink-3); }
 
 .plan-group + .plan-group { margin-top: clamp(2.5rem, 5vw, 3.5rem); }
+
+/* --------------------------------------------------- 30. CJK typography -- */
+/* Archivo carries no CJK glyphs, so Chinese falls through to a system face.
+   The tight tracking and the width axis were drawn for Latin and make Han
+   characters look cramped and uneven, so both are neutralised here. */
+:root:lang(zh) {
+  --font: 'Archivo', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
+          'Noto Sans SC', 'Source Han Sans SC', ui-sans-serif, system-ui, sans-serif;
+}
+:lang(zh) h1, :lang(zh) h2, :lang(zh) h3, :lang(zh) h4 {
+  letter-spacing: 0;
+  font-stretch: normal;
+  line-height: 1.28;
+}
+:lang(zh) .hero h1 { line-height: 1.2; }
+:lang(zh) .fact__n,
+:lang(zh) .spec dd,
+:lang(zh) .analyser__figures b,
+:lang(zh) .proof-rank,
+:lang(zh) .row__kcal b { font-stretch: normal; letter-spacing: -0.01em; }
+:lang(zh) .field-label { letter-spacing: 0.02em; text-transform: none; }
+:lang(zh) .badge { letter-spacing: 0.02em; text-transform: none; }
+:lang(zh) body { line-height: 1.75; }
+/* Han text has no spaces to break on; keep long strings inside their box. */
+:lang(zh) .row__tag, :lang(zh) .range-card__d, :lang(zh) .season__step p { word-break: normal; overflow-wrap: anywhere; }
+
+/* ------------------------------------------------- 31. narrow-width fixes -- */
+/* Two columns on small screens would drop the meta line into the rank column,
+   which is only wide enough for a number. */
+@media (max-width: 719px) {
+  .proof-meta { grid-column: 2; margin-top: 0.25rem; }
+}
+
+/* Long field names ("Opneembaar eiwit", "Verwertbares Protein") in a narrow
+   spec cell: allow them to break rather than push the cell wider. */
+.spec dt { overflow-wrap: anywhere; hyphens: auto; }
+
+/* =============================================== 32. entrance animation -- */
+/* The hero arrives in one orchestrated sequence rather than a fade bolted on
+   to every section. As everywhere else, the stylesheet hides nothing on its
+   own: script.js adds .anim-in once it has confirmed the hero is present, and
+   a failsafe removes the held state regardless. */
+
+.hero__h1 .hero__line { display: block; overflow: hidden; }
+.js .hero.is-armed .hero__h1 .hero__line > * { display: inline-block; transform: translateY(105%); }
+.hero.anim-in .hero__h1 .hero__line > * {
+  transform: none;
+  transition: transform 950ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.js .hero.is-armed [data-hero] { opacity: 0; transform: translateY(14px); }
+.hero.anim-in [data-hero] {
+  opacity: 1; transform: none;
+  transition: opacity 780ms var(--ease), transform 820ms var(--ease);
+}
+.hero.anim-in [data-hero="1"] { transition-delay: 180ms; }
+.hero.anim-in [data-hero="2"] { transition-delay: 300ms; }
+.hero.anim-in [data-hero="3"] { transition-delay: 420ms; }
+
+/* The wing watermark drifts in behind the headline. */
+.js .hero.is-armed .hero__mark { opacity: 0; transform: translate(2%, -2%) scale(1.06); }
+.hero.anim-in .hero__mark {
+  opacity: 1; transform: none;
+  transition: opacity 1600ms var(--ease) 200ms, transform 2200ms var(--ease) 200ms;
+}
+
+/* -------------------------------------------------- 33. micro-motion -- */
+/* Small, functional responses to pointer and focus. Nothing decorative. */
+
+.season__step { transition: background-color var(--t) var(--ease), transform var(--t) var(--ease); }
+.season__step:hover { transform: translateY(-2px); }
+.season__i { transition: color var(--t) var(--ease); }
+.season__step:hover .season__i { color: var(--accent); }
+
+.plan { transition: border-color var(--t-fast) var(--ease), background-color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease); }
+.plan:hover { transform: translateY(-2px); }
+.plan__icon { transition: transform var(--t) var(--ease); }
+.plan:hover .plan__icon { transform: scale(1.08); }
+
+.person { transition: border-color var(--t-fast) var(--ease), background-color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease); }
+.person:hover { transform: translateY(-2px); }
+
+.dealer { transition: border-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease), transform var(--t-fast) var(--ease); }
+.dealer:hover { transform: translateY(-2px); }
+
+.media img { transition: transform 1200ms var(--ease); }
+.media:hover img { transform: scale(1.03); }
+.media { overflow: hidden; }
+
+/* Rows lift slightly and their chevron nudges, so the whole row reads as the
+   control rather than just the arrow. */
+.row__summary { transition: background-color var(--t-fast) var(--ease); }
+.row:not([open]) .row__summary:hover { background: var(--surface); }
+.row:not([open]) .row__summary:hover .row__chevron { transform: translateY(2px); }
+
+.proof-item { transition: background-color var(--t-fast) var(--ease); }
+.proof-item:hover { background: color-mix(in oklch, var(--fg) 5%, transparent); }
+
+.btn--signal, .btn--primary { will-change: transform; }
+
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion='on']) .hero.is-armed .hero__h1 .hero__line > *,
+  :root:not([data-motion='on']) .hero.is-armed [data-hero],
+  :root:not([data-motion='on']) .hero.is-armed .hero__mark { opacity: 1; transform: none; }
+  .season__step:hover, .plan:hover, .person:hover, .dealer:hover { transform: none; }
+  .media:hover img { transform: none; }
+  .analyser__fill { transition: none !important; }
+}

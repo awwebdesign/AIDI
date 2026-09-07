@@ -1,4 +1,4 @@
-/* AIDI — runtime.
+/* AIDI runtime.
    Pages ship with Dutch already in the markup, so the site is complete with
    JavaScript disabled and fully indexable. This script switches language,
    drives navigation, and adds the filtering, sorting and search that turn a
@@ -72,7 +72,16 @@
   /* ------------------------------------------------------- translation -- */
 
   function applyLang(code, persist) {
-    if (!I18N[code]) code = BASE;
+    /* A language whose data did not load must not silently render as Dutch:
+       that looks like a broken switcher rather than a missing file. Say so,
+       and leave the page on the language it is already showing. */
+    if (!I18N[code]) {
+      if (window.console && console.error) {
+        console.error('AIDI: translations for "' + code + '" are not loaded. ' +
+          'i18n.js may be cached or incomplete. Reload bypassing the cache.');
+      }
+      return;
+    }
     current = code;
     var meta = null;
     for (var i = 0; i < LANGS.length; i++) if (LANGS[i].code === code) meta = LANGS[i];
@@ -145,6 +154,12 @@
 
     if (persist) { try { localStorage.setItem(STORE_KEY, code); } catch (e) {} }
 
+    $$('[data-count]').forEach(function (el) {
+      var v = parseFloat(el.getAttribute('data-count'));
+      var d = parseInt(el.getAttribute('data-dec') || '0', 10);
+      if (!isNaN(v)) el.textContent = fmt(v, d);
+    });
+
     document.dispatchEvent(new CustomEvent('aidi:lang', { detail: { lang: code } }));
   }
 
@@ -154,16 +169,17 @@
     var head = $('.masthead');
     if (!head) return;
 
-    var ticking = false;
+    /* Set directly rather than inside requestAnimationFrame: rAF does not run
+       in a hidden tab, which would leave the header stuck in its last state. */
+    var stuck = null;
     function onScroll() {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(function () {
-        head.setAttribute('data-stuck', String(window.scrollY > 12));
-        ticking = false;
-      });
+      var now = window.scrollY > 12;
+      if (now === stuck) return;
+      stuck = now;
+      head.setAttribute('data-stuck', String(now));
     }
     window.addEventListener('scroll', onScroll, { passive: true });
+    document.addEventListener('visibilitychange', onScroll);
     onScroll();
 
     var burger = $('.burger');
@@ -196,6 +212,12 @@
   /* ---------------------------------------------------- language switch -- */
 
   function initLangMenu() {
+    /* Never offer a language whose data is absent, a button that appears to
+       do nothing is worse than one that is not there. */
+    $$('.lang__option').forEach(function (b) {
+      if (!I18N[b.getAttribute('data-lang')]) b.remove();
+    });
+
     $$('.lang').forEach(function (root) {
       var toggle = $('.lang__toggle', root);
       var menu = $('.lang__menu', root);
@@ -242,9 +264,57 @@
     });
   }
 
+  /* ------------------------------------------------------ hero arrival -- */
+  /* Arm and release in the same frame budget: the hero is only held back
+     once script.js is running, and a timer plus beforeprint guarantee the
+     held state comes off even if something later throws. */
+
+  function initHero() {
+    var hero = $('.hero');
+    if (!hero) return;
+    if (reduced.matches) { countFacts(hero); return; }
+
+    hero.classList.add('is-armed');
+    var release = function () {
+      hero.classList.add('anim-in');
+      setTimeout(function () { countFacts(hero); }, 520);
+    };
+    requestAnimationFrame(function () { requestAnimationFrame(release); });
+    /* If rAF never runs (hidden tab, headless render) nothing stays hidden. */
+    setTimeout(release, 1200);
+    window.addEventListener('beforeprint', release);
+  }
+
+  function countFacts(scope) {
+    $$('[data-count]', scope).forEach(function (el) {
+      var target = parseFloat(el.getAttribute('data-count'));
+      var dec = parseInt(el.getAttribute('data-dec') || '0', 10);
+      if (isNaN(target)) return;
+      if (reduced.matches) { el.textContent = fmt(target, dec); return; }
+
+      var begun = null, dur = 1200;
+      function step(now) {
+        if (begun === null) begun = now;
+        var p = Math.min((now - begun) / dur, 1);
+        el.textContent = fmt(target * (1 - Math.pow(1 - p, 5)), dec);
+        if (p < 1) requestAnimationFrame(step);
+        else el.textContent = fmt(target, dec);
+      }
+      requestAnimationFrame(step);
+    });
+  }
+
   /* ---------------------------------------------------------- analyser -- */
-  /* The hero readout. Cycles through the range so the central claim — every
-     mix ships with its numbers — is demonstrated rather than asserted. */
+  /* The hero readout. It advances on its own so a visitor sees the range
+     without having to discover a control, and the tab strip doubles as a
+     progress bar so the rotation is legible rather than mysterious. Clicking
+     a tab hands control to the visitor and stops the rotation for good, which
+     is also the pause mechanism WCAG 2.2.2 asks for. */
+
+  var ROTATE_MS = 4600;
+  var ROTATE_MS_CALM = 7000;
+
+  function rotateMs() { return reduced.matches ? ROTATE_MS_CALM : ROTATE_MS; }
 
   function initAnalyser() {
     var root = $('.analyser');
@@ -252,35 +322,63 @@
 
     var order = FEEDS.slice();
     var START = Math.max(0, order.findIndex(function (f) { return f.slug === 'aidi-mix-3'; }));
-    var img = $('.analyser__figure img', root);
-    var name = $('.analyser__name h3', root);
-    var tagline = $('.analyser__name p', root);
+
+    var img = $('.analyser__figure img:not(.analyser__next)', root);
+    var nextImg = $('.analyser__next', root);
+    var name = $('.analyser__product', root);
+    var tagline = $('.analyser__phases', root);
     var track = $('.macro__track', root);
     var key = $('.macro__key', root);
     var figures = $('.analyser__figures', root);
     var tabs = $$('.analyser__tab', root);
-    var index = 0;
+    var index = START;
     var timer = null;
+    var manual = false;
 
-    function paint(i, animate) {
-      var f = order[i];
-      index = i;
-      img.src = 'assets/products/' + f.img + '.jpg';
-      img.alt = t('p.' + f.slug + '.name');
-      name.textContent = t('p.' + f.slug + '.name');
-      tagline.textContent = f.phases.map(function (p) { return t('phase.' + p); }).join(' · ');
-
-      var m = f.macro;
-      var sum = m.fat + m.protein + m.carbs;
-      var segs = [
+    function segments(m) {
+      return [
         { cls: 'fat', v: m.fat, label: t('spec.fat') },
         { cls: 'pro', v: m.protein, label: t('spec.protein') },
         { cls: 'carb', v: m.carbs, label: t('spec.carbs') }
       ];
+    }
 
+    /* Swap the photograph through a second stacked image so the change is a
+       crossfade rather than a flash of empty frame while the file loads. */
+    function swapImage(src, alt) {
+      if (!nextImg) { img.src = src; img.alt = alt; return; }
+      if (reduced.matches) { img.src = src; img.alt = alt; return; }
+      var pre = new Image();
+      pre.onload = function () {
+        nextImg.src = src;
+        nextImg.classList.add('is-in');
+        setTimeout(function () {
+          img.src = src;
+          img.alt = alt;
+          nextImg.classList.remove('is-in');
+        }, 520);
+      };
+      pre.onerror = function () { img.src = src; img.alt = alt; };
+      pre.src = src;
+    }
+
+    function paint(i, animate) {
+      var f = order[i];
+      index = i;
+
+      var src = 'assets/products/' + f.img + '.jpg';
+      var label = t('p.' + f.slug + '.name');
+      if (animate) swapImage(src, label);
+      else { img.src = src; img.alt = label; }
+
+      name.textContent = label;
+      tagline.textContent = f.phases.map(function (p) { return t('phase.' + p); }).join(' · ');
+
+      var m = f.macro;
+      var sum = m.fat + m.protein + m.carbs;
       track.innerHTML = '';
       key.innerHTML = '';
-      segs.forEach(function (s) {
+      segments(m).forEach(function (s) {
         var d = document.createElement('span');
         d.className = 'macro__seg macro__seg--' + s.cls;
         d.style.width = (s.v / sum * 100).toFixed(2) + '%';
@@ -289,16 +387,30 @@
         var item = document.createElement('span');
         item.className = 'macro__item';
         item.innerHTML = '<span class="macro__swatch" style="background:var(--m-' + s.cls + ')"></span>' +
-          s.label + ' <span class="macro__val">' + s.v.toFixed(1).replace('.', ',') + '%</span>';
+          s.label + ' <span class="macro__val">' + fmt(s.v, 1) + '%</span>';
         key.appendChild(item);
       });
 
       figures.innerHTML =
         '<div><span class="field-label">' + t('spec.energy') + '</span><b>' + fmt(m.kcal, 0) + '</b><span class="field-label">' + t('spec.kcalUnit') + '</span></div>' +
-        '<div><span class="field-label">' + t('spec.absorbable') + '</span><b>' + m.absorbable.toFixed(1).replace('.', ',') + '%</b></div>' +
-        '<div><span class="field-label">' + t('spec.omega') + '</span><b>' + m.omega + '</b></div>';
+        '<div><span class="field-label">' + t('spec.absorbable') + '</span><b>' + fmt(m.absorbable, 1) + '%</b></div>' +
+        '<div><span class="field-label">' + t('spec.omega') + '</span><b>' + fmt(m.omega, 1) + ' : 1</b></div>';
 
-      tabs.forEach(function (tab, ti) { tab.setAttribute('aria-selected', String(ti === i)); });
+      tabs.forEach(function (tab, ti) {
+        tab.setAttribute('aria-selected', String(ti === i));
+        var fill = $('.analyser__fill', tab);
+        if (!fill) return;
+        /* Restart the fill only on the tab that is now running. */
+        fill.style.transition = 'none';
+        fill.style.transform = 'scaleX(0)';
+        if (ti === i && !manual && !reduced.matches) {
+          void fill.offsetWidth;
+          fill.style.transition = 'transform ' + rotateMs() + 'ms linear';
+          fill.style.transform = 'scaleX(1)';
+        } else if (ti === i) {
+          fill.style.transform = 'scaleX(1)';
+        }
+      });
 
       if (animate && !reduced.matches) {
         track.animate(
@@ -309,20 +421,56 @@
     }
 
     function start() {
-      if (reduced.matches) return;
+      if (manual) return;
       stop();
-      timer = setInterval(function () { paint((index + 1) % order.length, true); }, 5200);
+      timer = setInterval(function () { paint((index + 1) % order.length, true); }, rotateMs());
+      /* Re-arm the progress fill on the tab that is currently showing. */
+      var fill = $('.analyser__fill', tabs[index]);
+      if (fill && !reduced.matches) {
+        fill.style.transition = 'none';
+        fill.style.transform = 'scaleX(0)';
+        void fill.offsetWidth;
+        fill.style.transition = 'transform ' + rotateMs() + 'ms linear';
+        fill.style.transform = 'scaleX(1)';
+      }
     }
-    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+
+    function stop() {
+      if (timer) { clearInterval(timer); timer = null; }
+      var fill = $('.analyser__fill', tabs[index]);
+      if (fill) {
+        var w = fill.getBoundingClientRect().width;
+        var full = fill.parentNode.getBoundingClientRect().width || 1;
+        fill.style.transition = 'none';
+        fill.style.transform = 'scaleX(' + (w / full).toFixed(3) + ')';
+      }
+    }
+
+    /* Taking hold of a tab is a deliberate choice: stop rotating and leave
+       the visitor in charge. */
+    function takeOver(i) {
+      manual = true;
+      stop();
+      root.setAttribute('data-manual', 'true');
+      paint(i, true);
+    }
 
     tabs.forEach(function (tab, i) {
-      tab.addEventListener('click', function () { paint(i, true); stop(); start(); });
+      tab.addEventListener('click', function () { takeOver(i); });
     });
 
-    root.addEventListener('mouseenter', stop);
-    root.addEventListener('mouseleave', start);
-    root.addEventListener('focusin', stop);
-    root.addEventListener('focusout', start);
+    /* Hovering or focusing the control strip pauses, so a visitor can aim at
+       a tab without it moving underneath them. Hovering the photograph does
+       not pause: that is where the eye rests, and freezing there is what made
+       the rotation look like it was not happening at all. */
+    var strip = $('.analyser__tabs', root);
+    if (strip) {
+      strip.addEventListener('mouseenter', stop);
+      strip.addEventListener('mouseleave', start);
+      strip.addEventListener('focusin', stop);
+      strip.addEventListener('focusout', start);
+    }
+
     document.addEventListener('visibilitychange', function () {
       if (document.hidden) stop(); else start();
     });
@@ -464,7 +612,7 @@
 
   /* ------------------------------------------------------------ reveals -- */
   /* Nothing is hidden by the stylesheet. This function hides only what is
-     genuinely below the fold at load, then reveals it on scroll — so a browser
+     genuinely below the fold at load, then reveals it on scroll, so a browser
      without IntersectionObserver, a hidden tab, a headless renderer or a
      print job all show the full page instead of blank sections. A timer
      backstops the observer regardless. */
@@ -536,16 +684,17 @@
 
   /* --------------------------------------------------------------- boot -- */
 
+  function applyLangSafe() { applyLang(storedLang(), false); }
+
   function boot() {
-    applyLang(storedLang(), false);
-    initHeader();
-    initLangMenu();
-    initAnalyser();
-    initFilters();
-    initCompare();
-    initDealerSearch();
-    initReveal();
-    initDeepLink();
+    /* Each feature is isolated: if one throws on a page that does not carry it,
+       navigation, language switching and the rest still come up. */
+    [applyLangSafe, initHeader, initLangMenu, initHero, initAnalyser, initFilters,
+     initCompare, initDealerSearch, initReveal, initDeepLink].forEach(function (fn) {
+      try { fn(); } catch (e) {
+        if (window.console && console.warn) console.warn('AIDI: ' + fn.name + ' failed', e);
+      }
+    });
 
     var year = $('[data-year]');
     if (year) year.textContent = new Date().getFullYear();

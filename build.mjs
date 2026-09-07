@@ -1,4 +1,4 @@
-/* AIDI — page generator (development tool).
+/* AIDI, page generator (development tool).
    Reads data.js + i18n.js and writes the eight static HTML pages.
 
    Why a generator: the shipped deliverable is plain HTML/CSS/JS with no
@@ -12,6 +12,13 @@
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { createContext, runInContext } from 'node:vm';
+import { createHash } from 'node:crypto';
+
+/* Short content hash per asset, appended to its URL. Without this a browser
+   keeps serving the previous style.css or i18n.js after an edit, and stale
+   translations look exactly like broken ones. */
+const rev = (file) =>
+  file + '?v=' + createHash('sha1').update(readFileSync(file)).digest('hex').slice(0, 8);
 
 /* ------------------------------------------------------------- context -- */
 
@@ -142,7 +149,7 @@ function masthead(active) {
 function footer() {
   const col = (heading, items) =>
     `<div>
-        <h4 data-i18n="footer.${heading}">${esc(nl('footer.' + heading))}</h4>
+        <h2 class="footer__h" data-i18n="footer.${heading}">${esc(nl('footer.' + heading))}</h2>
         <div class="footer__links">
           ${items.map(([key, href]) => `<a href="${href}" data-i18n="${key}">${esc(nl(key))}</a>`).join('\n          ')}
         </div>
@@ -185,7 +192,7 @@ function page({ file, key, active, body }) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="${rev('style.css')}">
 <script>document.documentElement.className = 'js';</script>
 </head>
 <body data-page="${key}">
@@ -199,9 +206,9 @@ ${body}
 
 ${footer()}
 
-<script src="data.js"></script>
-<script src="i18n.js"></script>
-<script src="script.js"></script>
+<script src="${rev('data.js')}"></script>
+<script src="${rev('i18n.js')}"></script>
+<script src="${rev('script.js')}"></script>
 </body>
 </html>
 `;
@@ -246,19 +253,19 @@ function detailBody(slug, { spec = null, sizes = [], extra = '' } = {}) {
   const paras = p.desc.map((d) => `<p>${esc(d)}</p>`).join('\n                  ');
   const usage = p.use.length
     ? `<div class="detail-block" data-usage-block>
-                  <h4 data-i18n="ui.usage">${esc(nl('ui.usage'))}</h4>
+                  <h3 data-i18n="ui.usage">${esc(nl('ui.usage'))}</h3>
                   <ul class="usage" data-i18n-items="p.${slug}.use">
                     ${p.use.map((u) => `<li>${esc(u)}</li>`).join('\n                    ')}
                   </ul>
                 </div>` : '';
   const ing = p.ing
     ? `<div class="detail-block">
-                  <h4 data-i18n="ui.composition">${esc(nl('ui.composition'))}</h4>
+                  <h3 data-i18n="ui.composition">${esc(nl('ui.composition'))}</h3>
                   <p class="ingredients" data-i18n="p.${slug}.ing">${esc(p.ing)}</p>
                 </div>` : '';
   const sizeBlock = sizes.length
     ? `<div class="detail-block">
-                  <h4 data-i18n="ui.available">${esc(nl('ui.available'))}</h4>
+                  <h3 data-i18n="ui.available">${esc(nl('ui.available'))}</h3>
                   <div class="tags">${sizes.map((s) => `<span class="badge badge--phase">${esc(s)}</span>`).join('')}</div>
                 </div>` : '';
 
@@ -272,7 +279,7 @@ function detailBody(slug, { spec = null, sizes = [], extra = '' } = {}) {
                 ${ing}
               </div>
               <div>
-                ${spec ? `<div class="detail-block"><h4 data-i18n="ui.analytics">${esc(nl('ui.analytics'))}</h4>${specList(spec)}</div>` : ''}
+                ${spec ? `<div class="detail-block"><h3 data-i18n="ui.analytics">${esc(nl('ui.analytics'))}</h3>${specList(spec)}</div>` : ''}
                 ${sizeBlock}
                 ${extra}
                 <div class="detail-block">
@@ -300,10 +307,10 @@ function feedRow(f) {
           <summary class="row__summary">
             ${thumb(f.img)}
             <span class="row__main">
-              <span class="row__name">
+              <h2 class="row__name">
                 <span data-i18n="p.${f.slug}.name">${esc(p.name)}</span>
                 ${f.isNew ? `<span class="badge badge--new" data-i18n="ui.new">${esc(nl('ui.new'))}</span>` : ''}
-              </span>
+              </h2>
               <span class="row__tag" data-i18n="p.${f.slug}.tag">${esc(p.tag)}</span>
               <span class="tags">${badges}</span>
             </span>
@@ -329,10 +336,10 @@ function suppRow(s) {
           <summary class="row__summary">
             ${thumb(s.img, 'pack')}
             <span class="row__main">
-              <span class="row__name">
+              <h2 class="row__name">
                 <span data-i18n="p.${s.slug}.name">${esc(p.name)}</span>
                 ${s.isNew ? `<span class="badge badge--new" data-i18n="ui.new">${esc(nl('ui.new'))}</span>` : ''}
-              </span>
+              </h2>
               <span class="row__tag" data-i18n="p.${s.slug}.tag">${esc(p.tag)}</span>
               <span class="tags"><span class="badge badge--phase" data-i18n="group.${s.group}">${esc(nl('group.' + s.group))}</span></span>
             </span>
@@ -369,9 +376,9 @@ function cta(kind = 'default') {
   </section>`;
 }
 
-function pagehead(key, crumbLabel) {
+function pagehead(key, crumbLabel, narrow = false) {
   return `  <section class="pagehead">
-    <div class="wrap">
+    <div class="wrap${narrow ? ' wrap--narrow' : ''}">
       <nav class="crumbs" aria-label="Kruimelpad">
         <a href="index.html" data-i18n="ui.home">${esc(nl('ui.home'))}</a>
         <span aria-hidden="true">/</span>
@@ -414,8 +421,8 @@ function homeBody() {
      visible; script.js starts on the same one. */
   const startIndex = FEEDS.findIndex((f) => f.slug === 'aidi-mix-3');
   const first = FEEDS[startIndex];
-  const tabs = FEEDS.map((_, i) =>
-    `<button type="button" class="analyser__tab" role="tab" aria-selected="${i === startIndex}" aria-label="${i + 1}"></button>`
+  const tabs = FEEDS.map((f, i) =>
+    `<button type="button" class="analyser__tab" role="tab" aria-selected="${i === startIndex}" aria-label="${esc(NL.p[f.slug].name)}"><span class="analyser__fill"></span></button>`
   ).join('\n          ');
 
   const seasonSteps = PHASES.map((ph, i) => `
@@ -426,7 +433,7 @@ function homeBody() {
             <span class="arrow-link"><span data-i18n="home.seasonCta">${esc(nl('home.seasonCta'))}</span>${ICON.arrowRight}</span>
           </a>`).join('');
 
-  /* Three mixes whose profiles differ most — the concept in one picture. */
+  /* Three mixes whose profiles differ most, the concept in one picture. */
   const compareSet = ['aidi-speedy-sprint', 'aidi-mix-2', 'aidi-long-distance-mix']
     .map((slug) => FEEDS.find((f) => f.slug === slug));
 
@@ -440,31 +447,32 @@ function homeBody() {
     ${WINGS.replace('class="mark"', 'class="mark hero__mark"')}
     <div class="wrap hero__grid">
       <div>
-        <h1><span data-i18n="home.h1a">${esc(nl('home.h1a'))}</span><em data-i18n="home.h1b">${esc(nl('home.h1b'))}</em><span data-i18n="home.h1c">${esc(nl('home.h1c'))}</span></h1>
-        ${T('home.lede', 'p', 'class="lede hero__lede"')}
-        <div class="btn-row">
+        <h1 class="hero__h1"><span class="hero__line"><span data-i18n="home.h1a">${esc(nl('home.h1a'))}</span><em data-i18n="home.h1b">${esc(nl('home.h1b'))}</em><span data-i18n="home.h1c">${esc(nl('home.h1c'))}</span></span></h1>
+        ${T('home.lede', 'p', 'class="lede hero__lede" data-hero="1"')}
+        <div class="btn-row" data-hero="2">
           <a class="btn btn--signal" href="voeders.html" data-i18n="ui.exploreRange">${esc(nl('ui.exploreRange'))}</a>
           <a class="btn btn--outline" href="verkooppunten.html" data-i18n="ui.findDealer">${esc(nl('ui.findDealer'))}</a>
         </div>
-        <div class="facts">
-          <div class="fact"><b class="fact__n">45</b>${T('home.fact1', 'span', 'class="fact__t"')}</div>
-          <div class="fact"><b class="fact__n">27</b>${T('home.fact2', 'span', 'class="fact__t"')}</div>
-          <div class="fact"><b class="fact__n">11</b>${T('home.fact3', 'span', 'class="fact__t"')}</div>
-          <div class="fact"><b class="fact__n">${N(5166, 0)}</b>${T('home.fact4', 'span', 'class="fact__t"')}</div>
+        <div class="facts" data-hero="3">
+          <div class="fact"><b class="fact__n" data-count="45" data-dec="0">45</b>${T('home.fact1', 'span', 'class="fact__t"')}</div>
+          <div class="fact"><b class="fact__n" data-count="27" data-dec="0">27</b>${T('home.fact2', 'span', 'class="fact__t"')}</div>
+          <div class="fact"><b class="fact__n" data-count="11" data-dec="0">11</b>${T('home.fact3', 'span', 'class="fact__t"')}</div>
+          <div class="fact"><b class="fact__n" data-count="5166" data-dec="0">${N(5166, 0)}</b>${T('home.fact4', 'span', 'class="fact__t"')}</div>
         </div>
       </div>
 
-      <div class="analyser" aria-label="${esc(nl('home.analyserTitle'))}">
+      <div class="analyser" data-hero="2" aria-label="${esc(nl('home.analyserTitle'))}">
         <div class="analyser__head">
           <span class="analyser__title"><span class="analyser__dot"></span>${T('home.analyserTitle', 'span', 'class="field-label"')}</span>
           ${T('home.analyserLive', 'span', 'class="field-label"')}
         </div>
         <figure class="analyser__figure">
           <img src="assets/products/${first.img}.jpg" alt="${esc(NL.p[first.slug].name)}" width="700" height="525" fetchpriority="high">
+          <img class="analyser__next" src="assets/products/${first.img}.jpg" alt="" aria-hidden="true" width="700" height="525">
           <figcaption class="analyser__name">
             <div>
-              <h3>${esc(NL.p[first.slug].name)}</h3>
-              <p>${first.phases.map((p) => esc(nl('phase.' + p))).join(' · ')}</p>
+              <p class="analyser__product">${esc(NL.p[first.slug].name)}</p>
+              <p class="analyser__phases">${first.phases.map((p) => esc(nl('phase.' + p))).join(' · ')}</p>
             </div>
           </figcaption>
         </figure>
@@ -633,7 +641,7 @@ function conceptBody() {
     ['spec.omega', 'concept.numbersOmega']
   ];
 
-  return `${pagehead('concept', 'concept')}
+  return `${pagehead('concept', 'concept', true)}
 
   <section class="section section--flush-top">
     <div class="wrap wrap--narrow">
@@ -834,7 +842,7 @@ function teamBody() {
   return `${pagehead('team', 'team')}
 
   <section class="section section--flush-top">
-    <div class="wrap split">
+    <div class="wrap split split--top">
       <figure class="media" data-rise>
         <img src="assets/brand/team-noel-willockx.jpg" alt="Eddy Noël en Ivan Willockx" loading="lazy" width="1200" height="800">
         <figcaption data-i18n="home.teamCaption">${esc(nl('home.teamCaption'))}</figcaption>
@@ -909,7 +917,7 @@ function dealerCard(d) {
   const noteKey = d.note === 'order' ? 'ui.orderOnly' : d.note === 'appointment' ? 'ui.byAppointment' : null;
 
   return `        <article class="dealer" data-find="${esc(find)}">
-          <h4>${esc(d.name)}</h4>
+          <h3>${esc(d.name)}</h3>
           ${addr ? `<address>${addr}</address>` : ''}
           ${links.length ? `<div class="dealer__links">${links.join('')}</div>` : ''}
           ${d.distributor ? `<span class="dealer__note" data-i18n="ui.distributor">${esc(nl('ui.distributor'))}</span>` : ''}
@@ -923,7 +931,7 @@ function verkooppuntenBody() {
     if (!list.length) return '';
     return `      <div class="country-group">
         <div class="country-head">
-          <h3 data-i18n="country.${code}">${esc(nl('country.' + code))}</h3>
+          <h2 data-i18n="country.${code}">${esc(nl('country.' + code))}</h2>
           <span>${list.length} ${esc(nl(list.length === 1 ? 'ui.dealersOne' : 'ui.dealers'))}</span>
         </div>
         <div class="dealers">
@@ -965,7 +973,7 @@ function contactBody() {
           </a>`;
 
   const intl = DEALERS.filter((d) => d.distributor).map((d) => `<article class="dealer">
-          <h4>${esc(d.name)}</h4>
+          <h3>${esc(d.name)}</h3>
           <p class="field-label" style="margin-top:0.35rem" data-i18n="country.${d.c}">${esc(nl('country.' + d.c))}</p>
           <div class="dealer__links">
             ${d.tel ? `<a href="tel:${d.tel.replace(/[^+\d]/g, '')}">${esc(d.tel)}</a>` : ''}

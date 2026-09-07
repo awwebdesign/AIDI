@@ -1,4 +1,4 @@
-/* AIDI — structured product, dealer and results data.
+/* AIDI - structured product, dealer and results data.
    Language-independent: numbers, slugs, images, taxonomy.
    All translated strings live in i18n.js, keyed by these slugs. */
 
@@ -213,7 +213,7 @@ const DEALERS = [
   { c: 'be', name: 'Hobbyzaak Jansseune', street: 'Pervijzestraat 71', zip: '8600', city: 'Diksmuide', tel: '051 55 55 80', note: 'order' },
   { c: 'be', name: 'Bird Trading Ivo', street: 'Houwaartstraat 64', zip: '3270', city: 'Scherpenheuvel', tel: '0475 35 37 58' },
   { c: 'be', name: 'Aveve Lapage Zottegem', street: 'Wassenhovestraat 26 (Leeuwergem)', zip: '9620', city: 'Zottegem', tel: '09 360 16 44', email: 'lapage.marc@aveve.be' },
-  { c: 'be', name: 'Horta Kuurne — Dendauw', street: 'Brugsesteenweg 432', zip: '8520', city: 'Kuurne', tel: '056 71 24 52', email: 'info@dendauw.be' },
+  { c: 'be', name: 'Horta Kuurne - Dendauw', street: 'Brugsesteenweg 432', zip: '8520', city: 'Kuurne', tel: '056 71 24 52', email: 'info@dendauw.be' },
   { c: 'be', name: 'Animal Friends', street: "Rue d'Abeiche 1", zip: '1420', city: "Braine-l'Alleud", tel: '02 384 23 66', email: 'info@animals-friends.be', web: 'https://www.sprl-luc-van-thuyne.be/' },
   { c: 'be', name: 'Carine Engels', street: 'Peperstraat 2', zip: '9060', city: 'Zelzate', tel: '09 345 53 09' },
   { c: 'be', name: 'Convens', street: 'Graanstraat 19', zip: '2490', city: 'Balen', tel: '014 31 15 74', email: 'info@convens.be', web: 'https://www.convens.be' },
@@ -241,10 +241,10 @@ const DEALERS = [
   { c: 'nl', name: 'Schamp Diervoeders en Fourage', street: 'Distelbergsestraat 1a', zip: '', city: 'Afferden (Gelderland)', tel: '+31 6 27 24 99 30', note: 'appointment' },
   { c: 'nl', name: 'Theuns Dierenvoeders', street: 'De Hak 16B', zip: '5107 RG', city: 'Dongen', tel: '+31 162 31 30 43', email: 'info@dierenparadijstheuns.nl', web: 'https://www.dierenparadijstheuns.nl/' },
 
-  { c: 'de', name: 'Lasterie Shop', street: 'Altenberger Straße 3', zip: '49733', city: 'Haren (Ems) — OT Altenberge', tel: '+49 5934 926 9975', email: 'info@lasterie.nl', web: 'https://www.lasterieshop.eu' },
+  { c: 'de', name: 'Lasterie Shop', street: 'Altenberger Straße 3', zip: '49733', city: 'Haren (Ems), OT Altenberge', tel: '+49 5934 926 9975', email: 'info@lasterie.nl', web: 'https://www.lasterieshop.eu' },
   { c: 'de', name: 'Horst & Sandeck GmbH & Co. Landhandel KG', street: 'Handelsweg 5', zip: '38539', city: 'Müden (Aller)', tel: '+49 5375 1237', email: 'info@tauben-sandeck.de', web: 'https://shop.tauben-sandeck.de/', note: 'order' },
   { c: 'de', name: 'Lindemeyer Tiernahrung + Taubensport', street: 'Roßkampweg 69', zip: '32130', city: 'Enger', tel: '+49 5224 790 357', email: 'info@tiernahrung-lindemeyer.de', web: 'https://www.tiernahrung-lindemeyer.de', note: 'order' },
-  { c: 'de', name: 'Haarhaus H. — Die Fütterscheune', street: 'Eickenstraße 1A', zip: '51709', city: 'Marienheide-Kalsbach', email: 'futterscheune.tiernahrung@t-online.de', note: 'order' },
+  { c: 'de', name: 'Haarhaus H. - Die Fütterscheune', street: 'Eickenstraße 1A', zip: '51709', city: 'Marienheide-Kalsbach', email: 'futterscheune.tiernahrung@t-online.de', note: 'order' },
   { c: 'de', name: 'Futtermittel & Naturkost Mühle Gladen', street: 'Bahnhofstraße 42', zip: '46286', city: 'Dorsten-Lembeck', tel: '+49 2369 7112', email: 'info@muehle-gladen.de', note: 'order' },
   { c: 'de', name: 'Crengeldanzer Mühle Witten', street: 'Bochumer Str. 15', zip: '58455', city: 'Witten', tel: '+49 2302 57623', email: 'Crengeldanzer@web.de' },
 
@@ -258,12 +258,12 @@ const DEALERS = [
 
   { c: 'hr', name: 'Dalmat d.o.o.', street: 'Murvica IK 2A', zip: '23000', city: 'Zadar', tel: '+385 23 276 322', email: 'info@dalmat.hr', web: 'https://www.dalmat.hr' },
 
-  { c: 'us', name: 'W M Imports, Inc. — Andy Waclaw', street: '', zip: '', city: '', tel: '+1 773 771 7587', email: 'feedlikeapro@gmail.com', web: 'https://www.feedlikeapro.com', distributor: true },
-  { c: 'us', name: 'BigAndysloft LLC — Andy Larentzakis', street: '', zip: '', city: '', tel: '+1 352 345 6613', email: 'BigAndysloft@yahoo.ca' },
+  { c: 'us', name: 'W M Imports, Inc. (Andy Waclaw)', street: '', zip: '', city: '', tel: '+1 773 771 7587', email: 'feedlikeapro@gmail.com', web: 'https://www.feedlikeapro.com', distributor: true },
+  { c: 'us', name: 'BigAndysloft LLC (Andy Larentzakis)', street: '', zip: '', city: '', tel: '+1 352 345 6613', email: 'BigAndysloft@yahoo.ca' },
 
   { c: 'cz', name: 'Lubomír Kubácek', street: '', zip: '', city: '', tel: '+420 607 605 636', email: 'lubomir.kubacek@oswald.cz', web: 'http://www.eshop-provsechny.cz/pigeons/index.php?route=product/category&path=67', distributor: true },
 
-  { c: 'pl', name: 'AIDI Polska — Marek Trzaska', street: '', zip: '', city: '', tel: '+48 882 063 479', email: 'm.trzaska1@gmail.com', web: 'https://www.aidipolska.pl', distributor: true }
+  { c: 'pl', name: 'AIDI Polska (Marek Trzaska)', street: '', zip: '', city: '', tel: '+48 882 063 479', email: 'm.trzaska1@gmail.com', web: 'https://www.aidipolska.pl', distributor: true }
 ];
 
 const COUNTRY_ORDER = ['be', 'nl', 'de', 'fr', 'gb', 'it', 'hu', 'hr', 'us', 'cz', 'pl'];
