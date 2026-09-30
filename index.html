@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
-<link rel="stylesheet" href="style.css?v=b6f01939">
+<link rel="stylesheet" href="style.css?v=d08a425c">
 <script>document.documentElement.className = 'js';</script>
 </head>
 <body data-page="home">
@@ -88,7 +88,7 @@
         </div>
         <div class="facts" data-hero="3">
           <div class="fact"><b class="fact__n" data-count="45" data-dec="0">45</b><span data-i18n="home.fact1" class="fact__t">jaar voedingsexpertise</span></div>
-          <div class="fact"><b class="fact__n" data-count="27" data-dec="0">27</b><span data-i18n="home.fact2" class="fact__t">producten in het gamma</span></div>
+          <div class="fact"><b class="fact__n" data-count="26" data-dec="0">26</b><span data-i18n="home.fact2" class="fact__t">producten in het gamma</span></div>
           <div class="fact"><b class="fact__n" data-count="11" data-dec="0">11</b><span data-i18n="home.fact3" class="fact__t">landen met verkooppunten</span></div>
           <div class="fact"><b class="fact__n" data-count="5166" data-dec="0"><span data-num="5166" data-dec="0">5166</span></b><span data-i18n="home.fact4" class="fact__t">duiven geklopt op 1. Nat. Argenton</span></div>
         </div>
@@ -182,7 +182,7 @@
   </section>
 
   <section class="section">
-    <div class="wrap split split--wide-media">
+    <div class="wrap split split--wide-media split--top">
       <div>
         <h2 data-i18n="home.conceptTitle">Waarom wij de cijfers erbij zetten</h2>
         <div class="prose" style="margin-top:1.25rem">
@@ -193,9 +193,9 @@
         <p style="margin-top:1.5rem"><a class="arrow-link" href="concept.html"><span data-i18n="home.conceptCta">Lees het AIDI Concept</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></p>
       </div>
       <div>
-        <h3 data-i18n="home.conceptCompare">Drie mengelingen, drie profielen</h3>
-        <div style="display:grid;gap:1.5rem;margin-top:1.35rem" data-stagger>
-          <div data-rise>
+        <h3 data-i18n="home.conceptCompare">Alle tien mengelingen vergeleken</h3>
+        <div class="mix-overview" data-stagger>
+          <a class="mix-overview__item" href="voeders.html#aidi-speedy-sprint" data-rise>
             <div style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:0.55rem">
               <b style="font-weight:650" data-i18n="p.aidi-speedy-sprint.name">AIDI Speedy Sprint</b>
               <span class="field-label"><span data-num="3315" data-dec="0">3315</span> kcal/kg</span>
@@ -212,8 +212,26 @@
                 <span class="macro__item"><span class="macro__swatch" style="background:var(--m-carb)"></span><span data-i18n="spec.carbs">Koolhydraten</span> <span class="macro__val"><span data-num="67.4" data-dec="1">67,4</span>%</span></span>
               </span>
             </span>
-          </div>
-          <div data-rise>
+          </a>
+          <a class="mix-overview__item" href="voeders.html#aidi-mix-1" data-rise>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:0.55rem">
+              <b style="font-weight:650" data-i18n="p.aidi-mix-1.name">AIDI Mix 1</b>
+              <span class="field-label"><span data-num="3277" data-dec="0">3277</span> kcal/kg</span>
+            </div>
+            <span class="macro">
+              <span class="macro__track" data-reveal>
+                <span class="macro__seg macro__seg--fat" style="width:9.17%"></span>
+                <span class="macro__seg macro__seg--pro" style="width:15.58%"></span>
+                <span class="macro__seg macro__seg--carb" style="width:75.25%"></span>
+              </span>
+              <span class="macro__key">
+                <span class="macro__item"><span class="macro__swatch" style="background:var(--m-fat)"></span><span data-i18n="spec.fat">Ruw vet</span> <span class="macro__val"><span data-num="7.3" data-dec="1">7,3</span>%</span></span>
+                <span class="macro__item"><span class="macro__swatch" style="background:var(--m-pro)"></span><span data-i18n="spec.protein">Ruw eiwit</span> <span class="macro__val"><span data-num="12.4" data-dec="1">12,4</span>%</span></span>
+                <span class="macro__item"><span class="macro__swatch" style="background:var(--m-carb)"></span><span data-i18n="spec.carbs">Koolhydraten</span> <span class="macro__val"><span data-num="59.9" data-dec="1">59,9</span>%</span></span>
+              </span>
+            </span>
+          </a>
+          <a class="mix-overview__item" href="voeders.html#aidi-mix-2" data-rise>
             <div style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:0.55rem">
               <b style="font-weight:650" data-i18n="p.aidi-mix-2.name">AIDI Mix 2</b>
               <span class="field-label"><span data-num="3551" data-dec="0">3551</span> kcal/kg</span>
@@ -230,8 +248,44 @@
                 <span class="macro__item"><span class="macro__swatch" style="background:var(--m-carb)"></span><span data-i18n="spec.carbs">Koolhydraten</span> <span class="macro__val"><span data-num="51.92" data-dec="1">51,9</span>%</span></span>
               </span>
             </span>
-          </div>
-          <div data-rise>
+          </a>
+          <a class="mix-overview__item" href="voeders.html#aidi-mix-3" data-rise>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:0.55rem">
+              <b style="font-weight:650" data-i18n="p.aidi-mix-3.name">AIDI Mix 3</b>
+              <span class="field-label"><span data-num="3695" data-dec="0">3695</span> kcal/kg</span>
+            </div>
+            <span class="macro">
+              <span class="macro__track" data-reveal>
+                <span class="macro__seg macro__seg--fat" style="width:17.31%"></span>
+                <span class="macro__seg macro__seg--pro" style="width:17.86%"></span>
+                <span class="macro__seg macro__seg--carb" style="width:64.83%"></span>
+              </span>
+              <span class="macro__key">
+                <span class="macro__item"><span class="macro__swatch" style="background:var(--m-fat)"></span><span data-i18n="spec.fat">Ruw vet</span> <span class="macro__val"><span data-num="13.52" data-dec="1">13,5</span>%</span></span>
+                <span class="macro__item"><span class="macro__swatch" style="background:var(--m-pro)"></span><span data-i18n="spec.protein">Ruw eiwit</span> <span class="macro__val"><span data-num="13.95" data-dec="1">13,9</span>%</span></span>
+                <span class="macro__item"><span class="macro__swatch" style="background:var(--m-carb)"></span><span data-i18n="spec.carbs">Koolhydraten</span> <span class="macro__val"><span data-num="50.63" data-dec="1">50,6</span>%</span></span>
+              </span>
+            </span>
+          </a>
+          <a class="mix-overview__item" href="voeders.html#aidi-girl-power" data-rise>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:0.55rem">
+              <b style="font-weight:650" data-i18n="p.aidi-girl-power.name">AIDI Girl Power</b>
+              <span class="field-label"><span data-num="3622" data-dec="0">3622</span> kcal/kg</span>
+            </div>
+            <span class="macro">
+              <span class="macro__track" data-reveal>
+                <span class="macro__seg macro__seg--fat" style="width:16.90%"></span>
+                <span class="macro__seg macro__seg--pro" style="width:18.84%"></span>
+                <span class="macro__seg macro__seg--carb" style="width:64.26%"></span>
+              </span>
+              <span class="macro__key">
+                <span class="macro__item"><span class="macro__swatch" style="background:var(--m-fat)"></span><span data-i18n="spec.fat">Ruw vet</span> <span class="macro__val"><span data-num="13.1" data-dec="1">13,1</span>%</span></span>
+                <span class="macro__item"><span class="macro__swatch" style="background:var(--m-pro)"></span><span data-i18n="spec.protein">Ruw eiwit</span> <span class="macro__val"><span data-num="14.6" data-dec="1">14,6</span>%</span></span>
+                <span class="macro__item"><span class="macro__swatch" style="background:var(--m-carb)"></span><span data-i18n="spec.carbs">Koolhydraten</span> <span class="macro__val"><span data-num="49.8" data-dec="1">49,8</span>%</span></span>
+              </span>
+            </span>
+          </a>
+          <a class="mix-overview__item" href="voeders.html#aidi-long-distance-mix" data-rise>
             <div style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:0.55rem">
               <b style="font-weight:650" data-i18n="p.aidi-long-distance-mix.name">AIDI Long Distance Mix</b>
               <span class="field-label"><span data-num="3713" data-dec="0">3713</span> kcal/kg</span>
@@ -248,7 +302,79 @@
                 <span class="macro__item"><span class="macro__swatch" style="background:var(--m-carb)"></span><span data-i18n="spec.carbs">Koolhydraten</span> <span class="macro__val"><span data-num="47.1" data-dec="1">47,1</span>%</span></span>
               </span>
             </span>
-          </div>
+          </a>
+          <a class="mix-overview__item" href="voeders.html#aidi-super-kweek" data-rise>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:0.55rem">
+              <b style="font-weight:650" data-i18n="p.aidi-super-kweek.name">AIDI Super Kweek</b>
+              <span class="field-label"><span data-num="3608" data-dec="0">3608</span> kcal/kg</span>
+            </div>
+            <span class="macro">
+              <span class="macro__track" data-reveal>
+                <span class="macro__seg macro__seg--fat" style="width:16.35%"></span>
+                <span class="macro__seg macro__seg--pro" style="width:20.95%"></span>
+                <span class="macro__seg macro__seg--carb" style="width:62.71%"></span>
+              </span>
+              <span class="macro__key">
+                <span class="macro__item"><span class="macro__swatch" style="background:var(--m-fat)"></span><span data-i18n="spec.fat">Ruw vet</span> <span class="macro__val"><span data-num="12.8" data-dec="1">12,8</span>%</span></span>
+                <span class="macro__item"><span class="macro__swatch" style="background:var(--m-pro)"></span><span data-i18n="spec.protein">Ruw eiwit</span> <span class="macro__val"><span data-num="16.4" data-dec="1">16,4</span>%</span></span>
+                <span class="macro__item"><span class="macro__swatch" style="background:var(--m-carb)"></span><span data-i18n="spec.carbs">Koolhydraten</span> <span class="macro__val"><span data-num="49.1" data-dec="1">49,1</span>%</span></span>
+              </span>
+            </span>
+          </a>
+          <a class="mix-overview__item" href="voeders.html#aidi-super-rui" data-rise>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:0.55rem">
+              <b style="font-weight:650" data-i18n="p.aidi-super-rui.name">AIDI Super Rui</b>
+              <span class="field-label"><span data-num="3586" data-dec="0">3586</span> kcal/kg</span>
+            </div>
+            <span class="macro">
+              <span class="macro__track" data-reveal>
+                <span class="macro__seg macro__seg--fat" style="width:16.80%"></span>
+                <span class="macro__seg macro__seg--pro" style="width:19.56%"></span>
+                <span class="macro__seg macro__seg--carb" style="width:63.64%"></span>
+              </span>
+              <span class="macro__key">
+                <span class="macro__item"><span class="macro__swatch" style="background:var(--m-fat)"></span><span data-i18n="spec.fat">Ruw vet</span> <span class="macro__val"><span data-num="13" data-dec="1">13,0</span>%</span></span>
+                <span class="macro__item"><span class="macro__swatch" style="background:var(--m-pro)"></span><span data-i18n="spec.protein">Ruw eiwit</span> <span class="macro__val"><span data-num="15.13" data-dec="1">15,1</span>%</span></span>
+                <span class="macro__item"><span class="macro__swatch" style="background:var(--m-carb)"></span><span data-i18n="spec.carbs">Koolhydraten</span> <span class="macro__val"><span data-num="49.24" data-dec="1">49,2</span>%</span></span>
+              </span>
+            </span>
+          </a>
+          <a class="mix-overview__item" href="voeders.html#aidi-winter-rust" data-rise>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:0.55rem">
+              <b style="font-weight:650" data-i18n="p.aidi-winter-rust.name">AIDI Winter / Rust</b>
+              <span class="field-label"><span data-num="3259" data-dec="0">3259</span> kcal/kg</span>
+            </div>
+            <span class="macro">
+              <span class="macro__track" data-reveal>
+                <span class="macro__seg macro__seg--fat" style="width:8.56%"></span>
+                <span class="macro__seg macro__seg--pro" style="width:14.23%"></span>
+                <span class="macro__seg macro__seg--carb" style="width:77.20%"></span>
+              </span>
+              <span class="macro__key">
+                <span class="macro__item"><span class="macro__swatch" style="background:var(--m-fat)"></span><span data-i18n="spec.fat">Ruw vet</span> <span class="macro__val"><span data-num="6.8" data-dec="1">6,8</span>%</span></span>
+                <span class="macro__item"><span class="macro__swatch" style="background:var(--m-pro)"></span><span data-i18n="spec.protein">Ruw eiwit</span> <span class="macro__val"><span data-num="11.3" data-dec="1">11,3</span>%</span></span>
+                <span class="macro__item"><span class="macro__swatch" style="background:var(--m-carb)"></span><span data-i18n="spec.carbs">Koolhydraten</span> <span class="macro__val"><span data-num="61.3" data-dec="1">61,3</span>%</span></span>
+              </span>
+            </span>
+          </a>
+          <a class="mix-overview__item" href="voeders.html#aidi-extra-power-snoepmix" data-rise>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:0.55rem">
+              <b style="font-weight:650" data-i18n="p.aidi-extra-power-snoepmix.name">AIDI Extra Power Snoepmix</b>
+              <span class="field-label"><span data-num="3588" data-dec="0">3588</span> kcal/kg</span>
+            </div>
+            <span class="macro">
+              <span class="macro__track" data-reveal>
+                <span class="macro__seg macro__seg--fat" style="width:24.96%"></span>
+                <span class="macro__seg macro__seg--pro" style="width:21.36%"></span>
+                <span class="macro__seg macro__seg--carb" style="width:53.68%"></span>
+              </span>
+              <span class="macro__key">
+                <span class="macro__item"><span class="macro__swatch" style="background:var(--m-fat)"></span><span data-i18n="spec.fat">Ruw vet</span> <span class="macro__val"><span data-num="17.3" data-dec="1">17,3</span>%</span></span>
+                <span class="macro__item"><span class="macro__swatch" style="background:var(--m-pro)"></span><span data-i18n="spec.protein">Ruw eiwit</span> <span class="macro__val"><span data-num="14.8" data-dec="1">14,8</span>%</span></span>
+                <span class="macro__item"><span class="macro__swatch" style="background:var(--m-carb)"></span><span data-i18n="spec.carbs">Koolhydraten</span> <span class="macro__val"><span data-num="37.2" data-dec="1">37,2</span>%</span></span>
+              </span>
+            </span>
+          </a>
         </div>
         <p data-i18n="home.conceptCompareNote" class="field-label" style="margin-top:1.5rem;line-height:1.5;text-transform:none;letter-spacing:0">Verhouding vet / eiwit / koolhydraten. De volledige waarden staan bij elk product.</p>
       </div>
@@ -260,7 +386,7 @@
       <div class="head">
         <div class="head__text">
           <h2 data-i18n="home.rangeTitle">Het gamma</h2>
-          <p data-i18n="home.rangeLede" class="lede">Zevenentwintig producten in drie lijnen. Alles wordt in België gemaakt.</p>
+          <p data-i18n="home.rangeLede" class="lede">Zesentwintig producten in drie lijnen. Alles wordt in België gemaakt.</p>
         </div>
         <a class="arrow-link" href="systeem.html"><span data-i18n="home.plansCta">Alle schema's</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
       </div>
@@ -293,9 +419,9 @@
           <span class="range-card__body">
             <span class="range-card__title">
               <span data-i18n="nav.equipment">Equipment</span>
-              <span class="range-card__n">3</span>
+              <span class="range-card__n">2</span>
             </span>
-            <span class="range-card__d" data-i18n="home.rangeEquipmentD">Automatische voederbakken, nestkartons en opleermanden.</span>
+            <span class="range-card__d" data-i18n="home.rangeEquipmentD">Automatische voederbakken en opleermanden.</span>
             <span class="arrow-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
           </span>
         </a>
@@ -481,8 +607,8 @@
     </div>
   </footer>
 
-<script src="data.js?v=89add716"></script>
-<script src="i18n.js?v=62e3273c"></script>
-<script src="script.js?v=de2f595b"></script>
+<script src="data.js?v=b1173059"></script>
+<script src="i18n.js?v=3e4fc696"></script>
+<script src="script.js?v=f91259c1"></script>
 </body>
 </html>

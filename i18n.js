@@ -132,15 +132,15 @@ I18N.nl = {
     conceptP1: 'Koolhydraten en vetten als brandstof, eiwitten voor de opbouw, vitamines en mineralen als bescherming. De best mogelijke balans tussen die groepen is de sleutel tot succes: voor déze afstand, in dít weer, na díe vlucht.',
     conceptP2: 'Daarom publiceren we bij elke mengeling het ruw vet, het ruw eiwit, het opneembare eiwit, de koolhydraten, de omzetbare energie, de ruwe celstof en de omega-verhouding. Niet omdat het mooi staat, maar omdat u er een keuze mee kunt maken.',
     conceptP3: 'Het gaat om het opneembare eiwit, niet om het ruwe. Dat onderscheid maakt het verschil tussen een duif die de opeenvolgende wedstrijden afwerkt en een duif die halverwege het seizoen leegloopt.',
-    conceptCompare: 'Drie mengelingen, drie profielen',
+    conceptCompare: "Alle tien mengelingen vergeleken",
     conceptCompareNote: 'Verhouding vet / eiwit / koolhydraten. De volledige waarden staan bij elk product.',
     conceptCta: 'Lees het AIDI Concept',
 
     rangeTitle: 'Het gamma',
-    rangeLede: 'Zevenentwintig producten in drie lijnen. Alles wordt in België gemaakt.',
+    rangeLede: "Zesentwintig producten in drie lijnen. Alles wordt in België gemaakt.",
     rangeVoedersD: 'Tien mengelingen voor vlucht, kweek, rui en rust, elk met de volledige analyse.',
     rangeSupplementenD: 'Veertien supplementen voor energie, conditie, herstel, darmflora en mineralen.',
-    rangeEquipmentD: 'Automatische voederbakken, nestkartons en opleermanden.',
+    rangeEquipmentD: "Automatische voederbakken en opleermanden.",
     itemsN: 'producten',
 
     proofTitle: 'De resultaten',
@@ -193,6 +193,7 @@ I18N.nl = {
   },
 
   voeders: {
+    filterHelp: "Kies een fase. Voor vluchten kunt u ook op afstand verfijnen. Klik op een mengeling voor de volledige analyse.",
     title: 'Voeders: tien mengelingen met hun volledige analyse | AIDI',
     meta: 'Tien AIDI-mengelingen voor snelheid, halve fond, dagfond, zware fond, kweek, rui en winterrust. Elk met gepubliceerd vet-, eiwit- en koolhydraatgehalte.',
     h1: 'Tien mengelingen, tien profielen',
@@ -214,8 +215,8 @@ I18N.nl = {
   },
 
   equipment: {
-    title: 'Equipment: voederbakken, nestkartons en manden | AIDI',
-    meta: 'AIDI equipment: volautomatische voederbakken in vier maten, nestkartons met etherische olie en houten opleermanden.',
+    title: "Equipment: voederbakken en manden | AIDI",
+    meta: "AIDI equipment: volautomatische voederbakken in vier maten en houten opleermanden.",
     h1: 'Equipment',
     lede: 'Dezelfde maatstaf als voor het voer: kwaliteit en degelijkheid, gemaakt om jaren mee te gaan.',
     specSize: 'Maat',
@@ -229,13 +230,14 @@ I18N.nl = {
   },
 
   systeem: {
+    moultT: "Rui",
     title: 'Het systeem: veertien vlieg-, kweek- en ruischema\'s | AIDI',
     meta: 'Download de AIDI vliegplannen: snelheid, halve fond, dagfond, overnachtfond, jonge duiven, kweek, rui en winterrust. Week per week uitgeschreven.',
     h1: 'Het systeem, week per week uitgeschreven',
     lede: 'Weten welke mengeling bestaat is één ding. Weten wanneer u ze geeft, is het systeem. Veertien schema\'s, gratis te downloaden.',
     generalT: 'Om te beginnen',
     flightT: 'Vliegschema\'s',
-    breedT: 'Kweek en rui',
+    breedT: "Kweek",
     restT: 'Winter en rust',
     p: {
       'optimaal-gebruik-aidi-concept': 'Hoe gebruik ik de AIDI voeders?',
@@ -275,6 +277,16 @@ I18N.nl = {
   },
 
   verkooppunten: {
+    nearbyTitle: "Vind een verkooppunt dichtbij",
+    nearbyHelp: "Gebruik uw locatie om de dichtstbijzijnde verkooppunten te vinden, of zoek hieronder op gemeente of postcode.",
+    locate: "Gebruik mijn locatie",
+    locating: "Uw locatie wordt bepaald…",
+    locationFound: "De drie dichtstbijzijnde verkooppunten met een bekend adres. Afstanden zijn hemelsbreed; bel vooraf voor beschikbaarheid.",
+    locationDenied: "Geen toegang tot uw locatie. Geef toestemming in uw browser en probeer opnieuw, of zoek hieronder op gemeente of postcode.",
+    locationUnavailable: "Uw locatie is niet beschikbaar. Probeer opnieuw of zoek hieronder op gemeente of postcode.",
+    nearest: "Dichtstbijzijnde",
+    straightLine: "hemelsbreed",
+    route: "Plan uw route",
     title: 'Verkooppunten: waar koopt u AIDI? | AIDI',
     meta: 'Ruim zestig AIDI-verkooppunten in België en Nederland, plus invoerders in Duitsland, Frankrijk, het VK, Italië, Hongarije, Kroatië, de VS, Tsjechië en Polen.',
     h1: 'Waar koopt u AIDI?',
@@ -622,15 +634,6 @@ I18N.nl = {
       use: [],
       ing: ''
     },
-    'aidi-nestkartons': {
-      name: 'AIDI Nestkartons',
-      tag: 'Schuiven over de stenen nestschotels, met capsule tegen ongedierte.',
-      desc: [
-        'De handige AIDI nestkartons schuift u over de stenen nestschotels. De capsule met etherische olie voorkomt ongedierte en luizen. Het is geen lastige klus meer om de nestschotels proper te krijgen.'
-      ],
-      use: [],
-      ing: ''
-    },
     'aidi-manden': {
       name: 'AIDI Manden',
       tag: 'Opleermanden in hout van de allerbeste kwaliteit.',
@@ -734,15 +737,15 @@ I18N.fr = {
     conceptP1: "Glucides et graisses comme carburant, protéines pour la construction, vitamines et minéraux comme protection. Le meilleur équilibre possible entre ces groupes est la clé du succès : pour cette distance, par ce temps, après ce concours.",
     conceptP2: "C'est pourquoi nous publions pour chaque mélange les matières grasses brutes, les protéines brutes, les protéines assimilables, les glucides, l'énergie métabolisable, la cellulose brute et le rapport oméga. Non pas parce que cela fait bien, mais parce que cela vous permet de choisir.",
     conceptP3: "Ce qui compte, ce sont les protéines assimilables, pas les protéines brutes. Cette distinction fait la différence entre un pigeon qui enchaîne les concours et un pigeon qui s'écroule à la mi-saison.",
-    conceptCompare: 'Trois mélanges, trois profils',
+    conceptCompare: "Les dix mélanges comparés",
     conceptCompareNote: 'Rapport graisses / protéines / glucides. Les valeurs complètes figurent sur chaque produit.',
     conceptCta: 'Lire le Concept AIDI',
 
     rangeTitle: 'La gamme',
-    rangeLede: 'Vingt-sept produits en trois lignes. Tout est fabriqué en Belgique.',
+    rangeLede: "Vingt-six produits en trois lignes. Tout est fabriqué en Belgique.",
     rangeVoedersD: "Dix mélanges pour le concours, l'élevage, la mue et le repos, chacun avec son analyse complète.",
     rangeSupplementenD: "Quatorze suppléments pour l'énergie, la condition, la récupération, la flore intestinale et les minéraux.",
-    rangeEquipmentD: "Mangeoires automatiques, fonds de nid en carton et paniers d'entraînement.",
+    rangeEquipmentD: "Mangeoires automatiques et paniers d’entraînement.",
     itemsN: 'produits',
 
     proofTitle: 'Les résultats',
@@ -795,6 +798,7 @@ I18N.fr = {
   },
 
   voeders: {
+    filterHelp: "Choisissez une phase. Pour les concours, affinez aussi par distance. Cliquez sur un mélange pour son analyse complète.",
     title: 'Aliments: dix mélanges avec leur analyse complète | AIDI',
     meta: "Dix mélanges AIDI pour la vitesse, le demi-fond, le grand demi-fond, le fond, l'élevage, la mue et le repos hivernal. Chacun avec ses taux publiés de graisses, protéines et glucides.",
     h1: 'Dix mélanges, dix profils',
@@ -816,8 +820,8 @@ I18N.fr = {
   },
 
   equipment: {
-    title: 'Équipement: mangeoires, fonds de nid et paniers | AIDI',
-    meta: "Équipement AIDI : mangeoires entièrement automatiques en quatre tailles, fonds de nid en carton à huile essentielle et paniers d'entraînement en bois.",
+    title: "Équipement: mangeoires et paniers | AIDI",
+    meta: "Équipement AIDI : mangeoires entièrement automatiques en quatre tailles et paniers d’entraînement en bois.",
     h1: 'Équipement',
     lede: "Le même critère que pour l'aliment : qualité et robustesse, fait pour durer des années.",
     specSize: 'Taille', specBirds: 'Pigeons', specLength: 'Longueur', specFeed: 'Aliment',
@@ -828,13 +832,14 @@ I18N.fr = {
   },
 
   systeem: {
+    moultT: "Mue",
     title: "Le système: quatorze plans de vol, d'élevage et de mue | AIDI",
     meta: 'Téléchargez les plans AIDI : vitesse, demi-fond, grand demi-fond, fond de nuit, jeunes pigeons, élevage, mue et repos hivernal. Détaillés semaine par semaine.',
     h1: 'Le système, détaillé semaine par semaine',
     lede: "Savoir quel mélange existe est une chose. Savoir quand le donner, c'est le système. Quatorze plans, en téléchargement gratuit.",
     generalT: 'Pour commencer',
     flightT: 'Plans de vol',
-    breedT: 'Élevage et mue',
+    breedT: "Élevage",
     restT: 'Hiver et repos',
     p: {
       'optimaal-gebruik-aidi-concept': 'Comment utiliser les aliments AIDI ?',
@@ -874,6 +879,16 @@ I18N.fr = {
   },
 
   verkooppunten: {
+    nearbyTitle: "Trouvez un point de vente à proximité",
+    nearbyHelp: "Utilisez votre position pour trouver les points de vente les plus proches, ou recherchez ci-dessous par commune ou code postal.",
+    locate: "Utiliser ma position",
+    locating: "Recherche de votre position…",
+    locationFound: "Les trois points de vente les plus proches avec une adresse connue. Distances à vol d’oiseau ; appelez pour vérifier la disponibilité.",
+    locationDenied: "Accès à votre position refusé. Autorisez-le dans votre navigateur et réessayez, ou recherchez ci-dessous par commune ou code postal.",
+    locationUnavailable: "Votre position est indisponible. Réessayez ou recherchez ci-dessous par commune ou code postal.",
+    nearest: "Le plus proche",
+    straightLine: "à vol d’oiseau",
+    route: "Planifier votre itinéraire",
     title: 'Points de vente: où acheter AIDI ? | AIDI',
     meta: 'Plus de soixante points de vente AIDI en Belgique et aux Pays-Bas, plus des importateurs en Allemagne, France, Royaume-Uni, Italie, Hongrie, Croatie, aux États-Unis, en Tchéquie et en Pologne.',
     h1: 'Où acheter AIDI ?',
@@ -1219,15 +1234,6 @@ I18N.fr = {
       use: [],
       ing: ''
     },
-    'aidi-nestkartons': {
-      name: 'Fonds de nid AIDI',
-      tag: "Se glissent sur les nids en pierre, avec capsule contre les parasites.",
-      desc: [
-        "Les pratiques fonds de nid AIDI se glissent sur les nids en pierre. La capsule d'huile essentielle prévient les parasites et les poux. Nettoyer les nids n'est plus une corvée."
-      ],
-      use: [],
-      ing: ''
-    },
     'aidi-manden': {
       name: "Paniers AIDI",
       tag: "Paniers d'entraînement en bois de toute première qualité.",
@@ -1331,15 +1337,15 @@ I18N.en = {
     conceptP1: 'Carbohydrates and fats as fuel, protein for building, vitamins and minerals as protection. The best possible balance between those groups is the key to success: for this distance, in this weather, after that race.',
     conceptP2: 'That is why we publish the crude fat, crude protein, absorbable protein, carbohydrates, metabolisable energy, crude fibre and omega ratio for every mixture. Not because it looks good, but because it lets you make a choice.',
     conceptP3: 'What matters is the absorbable protein, not the crude figure. That distinction is the difference between a pigeon that works through consecutive races and a pigeon that empties out halfway through the season.',
-    conceptCompare: 'Three mixtures, three profiles',
+    conceptCompare: "All ten mixtures compared",
     conceptCompareNote: 'Ratio of fat / protein / carbohydrate. The full values appear with every product.',
     conceptCta: 'Read the AIDI Concept',
 
     rangeTitle: 'The range',
-    rangeLede: 'Twenty-seven products across three lines. Everything is made in Belgium.',
+    rangeLede: "Twenty-six products across three lines. Everything is made in Belgium.",
     rangeVoedersD: 'Ten mixtures for racing, breeding, moult and rest, each with its full analysis.',
     rangeSupplementenD: 'Fourteen supplements for energy, condition, recovery, gut flora and minerals.',
-    rangeEquipmentD: 'Automatic feeders, nest cartons and training baskets.',
+    rangeEquipmentD: "Automatic feeders and training baskets.",
     itemsN: 'products',
 
     proofTitle: 'The results',
@@ -1392,6 +1398,7 @@ I18N.en = {
   },
 
   voeders: {
+    filterHelp: "Choose a phase. For racing, you can also narrow by distance. Click a mixture for its full analysis.",
     title: 'Feeds: ten mixtures with their full analysis | AIDI',
     meta: 'Ten AIDI mixtures for sprint, middle distance, long middle distance, long distance, breeding, moult and winter rest. Each with published fat, protein and carbohydrate content.',
     h1: 'Ten mixtures, ten profiles',
@@ -1413,8 +1420,8 @@ I18N.en = {
   },
 
   equipment: {
-    title: 'Equipment: feeders, nest cartons and baskets | AIDI',
-    meta: 'AIDI equipment: fully automatic feeders in four sizes, nest cartons with essential oil and wooden training baskets.',
+    title: "Equipment: feeders and baskets | AIDI",
+    meta: "AIDI equipment: fully automatic feeders in four sizes and wooden training baskets.",
     h1: 'Equipment',
     lede: 'The same standard as for the feed: quality and solidity, built to last for years.',
     specSize: 'Size', specBirds: 'Pigeons', specLength: 'Length', specFeed: 'Feed',
@@ -1425,13 +1432,14 @@ I18N.en = {
   },
 
   systeem: {
+    moultT: "Moult",
     title: 'The system: fourteen racing, breeding and moulting schedules | AIDI',
     meta: 'Download the AIDI schedules: sprint, middle distance, long middle distance, overnight long distance, young birds, breeding, moult and winter rest. Written out week by week.',
     h1: 'The system, written out week by week',
     lede: 'Knowing which mixture exists is one thing. Knowing when to give it is the system. Fourteen schedules, free to download.',
     generalT: 'To begin with',
     flightT: 'Racing schedules',
-    breedT: 'Breeding and moult',
+    breedT: "Breeding",
     restT: 'Winter and rest',
     p: {
       'optimaal-gebruik-aidi-concept': 'How do I use the AIDI feeds?',
@@ -1471,6 +1479,16 @@ I18N.en = {
   },
 
   verkooppunten: {
+    nearbyTitle: "Find a stockist nearby",
+    nearbyHelp: "Use your location to find the closest stockists, or search below by town or postcode.",
+    locate: "Use my location",
+    locating: "Finding your location…",
+    locationFound: "The three closest stockists with a known address. Distances are straight-line estimates; call ahead for availability.",
+    locationDenied: "Location access was denied. Allow it in your browser and retry, or search below by town or postcode.",
+    locationUnavailable: "Your location is unavailable. Try again or search below by town or postcode.",
+    nearest: "Closest",
+    straightLine: "straight-line distance",
+    route: "Get directions",
     title: 'Stockists: where do you buy AIDI? | AIDI',
     meta: 'More than sixty AIDI stockists in Belgium and the Netherlands, plus distributors in Germany, France, the UK, Italy, Hungary, Croatia, the USA, Czechia and Poland.',
     h1: 'Where do you buy AIDI?',
@@ -1816,15 +1834,6 @@ I18N.en = {
       use: [],
       ing: ''
     },
-    'aidi-nestkartons': {
-      name: 'AIDI Nest cartons',
-      tag: 'Slide over the stone nest bowls, with a capsule against vermin.',
-      desc: [
-        'The handy AIDI nest cartons slide over the stone nest bowls. The capsule of essential oil prevents vermin and lice. Cleaning nest bowls is no longer a chore.'
-      ],
-      use: [],
-      ing: ''
-    },
     'aidi-manden': {
       name: 'AIDI Baskets',
       tag: 'Training baskets in wood of the very best quality.',
@@ -1928,15 +1937,15 @@ I18N.de = {
     conceptP1: 'Kohlenhydrate und Fette als Brennstoff, Proteine für den Aufbau, Vitamine und Mineralien als Schutz. Das bestmögliche Gleichgewicht zwischen diesen Gruppen ist der Schlüssel zum Erfolg: für diese Entfernung, bei diesem Wetter, nach jenem Flug.',
     conceptP2: 'Deshalb veröffentlichen wir zu jeder Mischung das Rohfett, das Rohprotein, das verwertbare Protein, die Kohlenhydrate, die umsetzbare Energie, die Rohfaser und das Omega-Verhältnis. Nicht weil es gut aussieht, sondern weil Sie damit eine Wahl treffen können.',
     conceptP3: 'Es geht um das verwertbare Protein, nicht um das rohe. Dieser Unterschied entscheidet, ob eine Taube die aufeinanderfolgenden Wettflüge durchsteht oder mitten in der Saison leerläuft.',
-    conceptCompare: 'Drei Mischungen, drei Profile',
+    conceptCompare: "Alle zehn Mischungen im Vergleich",
     conceptCompareNote: 'Verhältnis Fett / Protein / Kohlenhydrate. Die vollständigen Werte stehen bei jedem Produkt.',
     conceptCta: 'Das AIDI Konzept lesen',
 
     rangeTitle: 'Das Sortiment',
-    rangeLede: 'Siebenundzwanzig Produkte in drei Linien. Alles wird in Belgien hergestellt.',
+    rangeLede: "Sechsundzwanzig Produkte in drei Linien. Alles wird in Belgien hergestellt.",
     rangeVoedersD: 'Zehn Mischungen für Flug, Zucht, Mauser und Ruhe, jeweils mit vollständiger Analyse.',
     rangeSupplementenD: 'Vierzehn Ergänzungen für Energie, Kondition, Erholung, Darmflora und Mineralien.',
-    rangeEquipmentD: 'Automatische Futterautomaten, Nestkartons und Lernkörbe.',
+    rangeEquipmentD: "Automatische Futterautomaten und Lernkörbe.",
     itemsN: 'Produkte',
 
     proofTitle: 'Die Ergebnisse',
@@ -1989,6 +1998,7 @@ I18N.de = {
   },
 
   voeders: {
+    filterHelp: "Wählen Sie eine Phase. Für Flüge können Sie zusätzlich nach Entfernung filtern. Klicken Sie auf eine Mischung für die vollständige Analyse.",
     title: 'Futter: zehn Mischungen mit vollständiger Analyse | AIDI',
     meta: 'Zehn AIDI Mischungen für Schnelligkeit, Mittelstrecke, weite Mittelstrecke, Langstrecke, Zucht, Mauser und Winterruhe. Jeweils mit veröffentlichtem Fett-, Protein- und Kohlenhydratgehalt.',
     h1: 'Zehn Mischungen, zehn Profile',
@@ -2010,8 +2020,8 @@ I18N.de = {
   },
 
   equipment: {
-    title: 'Zubehör: Futterautomaten, Nestkartons und Körbe | AIDI',
-    meta: 'AIDI Zubehör: vollautomatische Futterautomaten in vier Größen, Nestkartons mit ätherischem Öl und Lernkörbe aus Holz.',
+    title: "Zubehör: Futterautomaten und Körbe | AIDI",
+    meta: "AIDI Zubehör: vollautomatische Futterautomaten in vier Größen und Lernkörbe aus Holz.",
     h1: 'Zubehör',
     lede: 'Derselbe Maßstab wie beim Futter: Qualität und Solidität, gebaut, um Jahre zu halten.',
     specSize: 'Größe', specBirds: 'Tauben', specLength: 'Länge', specFeed: 'Futter',
@@ -2022,13 +2032,14 @@ I18N.de = {
   },
 
   systeem: {
+    moultT: "Mauser",
     title: 'Das System: vierzehn Flug-, Zucht- und Mauserpläne | AIDI',
     meta: 'Laden Sie die AIDI Pläne herunter: Schnelligkeit, Mittelstrecke, weite Mittelstrecke, Übernachtflug, Jungtauben, Zucht, Mauser und Winterruhe. Woche für Woche ausgeschrieben.',
     h1: 'Das System, Woche für Woche ausgeschrieben',
     lede: 'Zu wissen, welche Mischung es gibt, ist das eine. Zu wissen, wann Sie sie geben, ist das System. Vierzehn Pläne, kostenlos zum Download.',
     generalT: 'Zum Anfang',
     flightT: 'Flugpläne',
-    breedT: 'Zucht und Mauser',
+    breedT: "Zucht",
     restT: 'Winter und Ruhe',
     p: {
       'optimaal-gebruik-aidi-concept': 'Wie verwende ich die AIDI Futtersorten?',
@@ -2068,6 +2079,16 @@ I18N.de = {
   },
 
   verkooppunten: {
+    nearbyTitle: "Finden Sie eine Verkaufsstelle in Ihrer Nähe",
+    nearbyHelp: "Nutzen Sie Ihren Standort, um die nächsten Verkaufsstellen zu finden, oder suchen Sie unten nach Ort oder Postleitzahl.",
+    locate: "Meinen Standort verwenden",
+    locating: "Ihr Standort wird ermittelt…",
+    locationFound: "Die drei nächsten Verkaufsstellen mit bekannter Adresse. Entfernungen in Luftlinie; bitte Verfügbarkeit telefonisch prüfen.",
+    locationDenied: "Standortzugriff verweigert. Erlauben Sie ihn im Browser und versuchen Sie es erneut, oder suchen Sie unten nach Ort oder Postleitzahl.",
+    locationUnavailable: "Ihr Standort ist nicht verfügbar. Versuchen Sie es erneut oder suchen Sie unten nach Ort oder Postleitzahl.",
+    nearest: "Am nächsten",
+    straightLine: "Luftlinie",
+    route: "Route planen",
     title: 'Verkaufsstellen: wo kaufen Sie AIDI? | AIDI',
     meta: 'Über sechzig AIDI Verkaufsstellen in Belgien und den Niederlanden sowie Importeure in Deutschland, Frankreich, Großbritannien, Italien, Ungarn, Kroatien, den USA, Tschechien und Polen.',
     h1: 'Wo kaufen Sie AIDI?',
@@ -2413,15 +2434,6 @@ I18N.de = {
       use: [],
       ing: ''
     },
-    'aidi-nestkartons': {
-      name: 'AIDI Nestkartons',
-      tag: 'Über die Nestschalen aus Stein zu schieben, mit Kapsel gegen Ungeziefer.',
-      desc: [
-        'Die praktischen AIDI Nestkartons schieben Sie über die Nestschalen aus Stein. Die Kapsel mit ätherischem Öl verhindert Ungeziefer und Läuse. Das Sauberhalten der Nestschalen ist keine lästige Arbeit mehr.'
-      ],
-      use: [],
-      ing: ''
-    },
     'aidi-manden': {
       name: 'AIDI Körbe',
       tag: 'Lernkörbe aus Holz allerbester Qualität.',
@@ -2525,15 +2537,15 @@ I18N.zh = {
     conceptP1: '碳水化合物与脂肪提供燃料，蛋白质负责构建，维生素与矿物质提供保护。这些成分之间的最佳平衡正是成绩的关键：针对这个距离、这样的天气、那场比赛之后。',
     conceptP2: '因此我们为每一款配方公布粗脂肪、粗蛋白、可吸收蛋白、碳水化合物、代谢能、粗纤维与 Omega 比例。不是为了好看，而是为了让您据此作出选择。',
     conceptP3: '关键在可吸收蛋白，而不是粗蛋白。这个差别决定了一羽鸽子能连续完成多场比赛，还是在赛季中途就掉状态。',
-    conceptCompare: '三款配方，三种结构',
+    conceptCompare: "十款配方对比",
     conceptCompareNote: '脂肪 / 蛋白 / 碳水化合物的比例。完整数值列于每款产品之下。',
     conceptCta: '阅读 AIDI 理念',
 
     rangeTitle: '产品线',
-    rangeLede: '三条产品线，共二十七款产品。全部在比利时生产。',
+    rangeLede: "三条产品线，共二十六款产品。全部在比利时生产。",
     rangeVoedersD: '十款配方，涵盖比赛、育雏、换羽与休整，每款均附完整分析。',
     rangeSupplementenD: '十四款补充剂，涵盖能量、状态、恢复、肠道菌群与矿物质。',
-    rangeEquipmentD: '自动喂食器、巢盆纸垫与训练笼。',
+    rangeEquipmentD: "自动喂食器与训练笼。",
     itemsN: '款产品',
 
     proofTitle: '成绩',
@@ -2586,6 +2598,7 @@ I18N.zh = {
   },
 
   voeders: {
+    filterHelp: "选择阶段。比赛阶段还可按距离筛选。点击配方查看完整分析。",
     title: '饲料: 十款配方及完整分析 | AIDI',
     meta: '十款 AIDI 配方，覆盖短距离、中距离、长中距离、长距离、育雏、换羽与冬季休整。每款均公布脂肪、蛋白与碳水化合物含量。',
     h1: '十款配方，十种结构',
@@ -2607,8 +2620,8 @@ I18N.zh = {
   },
 
   equipment: {
-    title: '器材: 喂食器、巢盆纸垫与训练笼 | AIDI',
-    meta: 'AIDI 器材：四种规格的全自动喂食器、含精油胶囊的巢盆纸垫，以及木制训练笼。',
+    title: "器材: 喂食器与训练笼 | AIDI",
+    meta: "AIDI 器材：四种规格的全自动喂食器，以及木制训练笼。",
     h1: '器材',
     lede: '与饲料同一标准：品质与结实，做成能用上多年的东西。',
     specSize: '规格', specBirds: '鸽数', specLength: '长度', specFeed: '容量',
@@ -2619,13 +2632,14 @@ I18N.zh = {
   },
 
   systeem: {
+    moultT: "换羽",
     title: '系统: 十四份竞翔、育雏与换羽计划 | AIDI',
     meta: '下载 AIDI 计划：短距离、中距离、长中距离、过夜长距离、幼鸽、育雏、换羽与冬季休整。逐周写明。',
     h1: '系统，逐周写明',
     lede: '知道有哪些配方是一回事，知道什么时候给才是系统。十四份计划，免费下载。',
     generalT: '入门',
     flightT: '竞翔计划',
-    breedT: '育雏与换羽',
+    breedT: "育雏",
     restT: '冬季与休整',
     p: {
       'optimaal-gebruik-aidi-concept': '如何使用 AIDI 饲料？',
@@ -2665,6 +2679,16 @@ I18N.zh = {
   },
 
   verkooppunten: {
+    nearbyTitle: "查找附近销售点",
+    nearbyHelp: "使用您的位置查找最近的销售点，或在下方按城市或邮编搜索。",
+    locate: "使用我的位置",
+    locating: "正在定位…",
+    locationFound: "以下为有已知地址的三个最近销售点。距离为直线距离；请提前致电确认供货情况。",
+    locationDenied: "位置访问被拒绝。请在浏览器中允许后重试，或在下方按城市或邮编搜索。",
+    locationUnavailable: "无法获取您的位置。请重试或在下方按城市或邮编搜索。",
+    nearest: "最近",
+    straightLine: "直线距离",
+    route: "规划路线",
     title: '销售点: 在哪里购买 AIDI？| AIDI',
     meta: '比利时与荷兰共有六十多个 AIDI 销售点，另在德国、法国、英国、意大利、匈牙利、克罗地亚、美国、捷克与波兰设有进口商。',
     h1: '在哪里购买 AIDI？',
@@ -3006,15 +3030,6 @@ I18N.zh = {
       desc: [
         '要上班、要休假，或者就是没法像自己希望的那样准时照料鸽子？这款高品质全自动喂食器正好解决问题。额外的好处是：每次投喂都非常准时规律。',
         '可精确到秒设定，让您准确达到想要的投喂量。可用市电与 12 VDC 可充电电池；按每天两次投喂计算，充满电约可维持一个月。建议每两周充电一次以延长电池寿命。'
-      ],
-      use: [],
-      ing: ''
-    },
-    'aidi-nestkartons': {
-      name: 'AIDI 巢盆纸垫',
-      tag: '套在石制巢盆上，配有防虫胶囊。',
-      desc: [
-        '实用的 AIDI 巢盆纸垫可直接套在石制巢盆上。内含精油的胶囊可防虫防虱。清理巢盆再也不是苦差事。'
       ],
       use: [],
       ing: ''

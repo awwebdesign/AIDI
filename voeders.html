@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
-<link rel="stylesheet" href="style.css?v=b6f01939">
+<link rel="stylesheet" href="style.css?v=d08a425c">
 <script>document.documentElement.className = 'js';</script>
 </head>
 <body data-page="voeders">
@@ -92,7 +92,7 @@
     <div class="wrap">
       <div class="filters" data-filters="feed-list">
         
-        <div class="filters__group" role="group" aria-label="Fase">
+        <div class="filters__group" role="group" aria-label="Fase" data-i18n-attr="aria-label:voeders.filterPhase">
           <span class="field-label filters__label" data-i18n="voeders.filterPhase">Fase</span>
           <button type="button" class="chip" data-facet="phase" data-value="" aria-pressed="true" data-i18n="ui.all">Alles</button>
           <button type="button" class="chip" data-facet="phase" data-value="winter" aria-pressed="false" data-i18n="phase.winter">Winter &amp; rust</button>
@@ -101,7 +101,7 @@
           <button type="button" class="chip" data-facet="phase" data-value="rui" aria-pressed="false" data-i18n="phase.rui">Rui</button>
         </div>
 
-        <div class="filters__group" role="group" aria-label="Afstand">
+        <div class="filters__group" role="group" aria-label="Afstand" data-i18n-attr="aria-label:voeders.filterBand">
           <span class="field-label filters__label" data-i18n="voeders.filterBand">Afstand</span>
           <button type="button" class="chip" data-facet="band" data-value="" aria-pressed="true" data-i18n="ui.all">Alles</button>
           <button type="button" class="chip" data-facet="band" data-value="sprint" aria-pressed="false" data-i18n="band.sprint">Snelheid</button>
@@ -109,7 +109,9 @@
           <button type="button" class="chip" data-facet="band" data-value="dagfond" aria-pressed="false" data-i18n="band.dagfond">Dagfond</button>
           <button type="button" class="chip" data-facet="band" data-value="fond" aria-pressed="false" data-i18n="band.fond">Zware fond &amp; overnacht</button>
         </div>
-        <span class="filters__count" data-count></span>
+        <p data-i18n="voeders.filterHelp" class="filters__help">Kies een fase. Voor vluchten kunt u ook op afstand verfijnen. Klik op een mengeling voor de volledige analyse.</p>
+        <span class="filters__count" data-count role="status" aria-live="polite"></span>
+        <button type="button" class="btn btn--outline btn--sm" data-filter-reset hidden data-i18n="ui.reset">Filters wissen</button>
       </div>
       <div class="rows" id="feed-list" data-stagger>
         <details class="row" id="aidi-speedy-sprint" data-phase="vlucht" data-band="sprint" data-rise>
@@ -990,8 +992,8 @@
     </div>
   </footer>
 
-<script src="data.js?v=89add716"></script>
-<script src="i18n.js?v=62e3273c"></script>
-<script src="script.js?v=de2f595b"></script>
+<script src="data.js?v=b1173059"></script>
+<script src="i18n.js?v=3e4fc696"></script>
+<script src="script.js?v=f91259c1"></script>
 </body>
 </html>

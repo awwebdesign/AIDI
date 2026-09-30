@@ -493,6 +493,17 @@
     var state = {};
 
     function apply() {
+      if (bar.getAttribute('data-filters') === 'feed-list') {
+        var bandButton = $('[data-facet="band"]', bar);
+        var showBands = !state.phase || state.phase === 'vlucht';
+        if (!showBands) state.band = '';
+        if (bandButton) bandButton.closest('.filters__group').hidden = !showBands;
+      }
+      $$('.chip', bar).forEach(function (chip) {
+        chip.setAttribute('aria-pressed', String((state[chip.getAttribute('data-facet')] || '') === chip.getAttribute('data-value')));
+      });
+      var resetButton = $('[data-filter-reset]', bar);
+      if (resetButton) resetButton.hidden = !Object.keys(state).some(function (key) { return !!state[key]; });
       var shown = 0;
       rows.forEach(function (row) {
         var ok = Object.keys(state).every(function (facet) {
@@ -520,18 +531,30 @@
         c.setAttribute('aria-pressed', String(c === chip));
       });
       apply();
+      if (bar.getAttribute('data-filters') === 'feed-list') {
+        history.replaceState(null, '', location.pathname + location.search + (state.phase ? '#' + state.phase : ''));
+      }
     });
 
-    var reset = $('[data-reset]');
-    if (reset) {
+    $$('[data-reset], [data-filter-reset]').forEach(function (reset) {
       reset.addEventListener('click', function () {
         state = {};
         $$('.chip', bar).forEach(function (c) {
           c.setAttribute('aria-pressed', String(c.getAttribute('data-value') === ''));
         });
         apply();
+        history.replaceState(null, '', location.pathname + location.search);
       });
+    });
+
+    function filterFromHash() {
+      if (bar.getAttribute('data-filters') !== 'feed-list') return;
+      var phase = location.hash.slice(1);
+      state = PHASES.indexOf(phase) !== -1 ? { phase: phase } : {};
+      apply();
     }
+    window.addEventListener('hashchange', filterFromHash);
+    filterFromHash();
 
     document.addEventListener('aidi:lang', apply);
     apply();
@@ -607,6 +630,73 @@
     }
     document.addEventListener('aidi:lang', run);
     run();
+  }
+
+  /* Nearby recommendations use the shipped dealer coordinates. Location is
+     requested only on click and kept in memory for this page. */
+  function initNearbyDealers() {
+    var button = $('[data-locate]');
+    if (!button) return;
+    var output = $('[data-nearby]');
+    var status = $('[data-location-status]');
+    var candidates = $$('.country-group .dealer[data-lat][data-lon]');
+    var ranked = [];
+    var statusKey = '';
+
+    function render() {
+      status.textContent = statusKey ? t('verkooppunten.' + statusKey) : '';
+      output.replaceChildren();
+      ranked.forEach(function (result, index) {
+        var card = result.card.cloneNode(true);
+        card.hidden = false;
+        card.removeAttribute('data-find');
+        var distance = document.createElement('p');
+        distance.className = 'dealer__distance';
+        distance.textContent = (index === 0 ? t('verkooppunten.nearest') + ' · ' : '') +
+          fmt(result.distance, 1) + ' km ' + t('verkooppunten.straightLine');
+        card.prepend(distance);
+        var route = document.createElement('a');
+        route.className = 'arrow-link';
+        route.textContent = t('verkooppunten.route');
+        route.href = 'https://www.google.com/maps/dir/?api=1&destination=' +
+          encodeURIComponent(result.card.dataset.lat + ',' + result.card.dataset.lon);
+        route.target = '_blank';
+        route.rel = 'noopener noreferrer';
+        card.appendChild(route);
+        output.appendChild(card);
+      });
+      output.hidden = !ranked.length;
+    }
+
+    button.addEventListener('click', function () {
+      ranked = [];
+      if (!navigator.geolocation || !window.isSecureContext) {
+        statusKey = 'locationUnavailable'; render(); return;
+      }
+      button.disabled = true;
+      statusKey = 'locating';
+      render();
+      navigator.geolocation.getCurrentPosition(function (position) {
+        var rad = Math.PI / 180;
+        var lat = position.coords.latitude;
+        var lon = position.coords.longitude;
+        ranked = candidates.map(function (card) {
+          var targetLat = Number(card.dataset.lat);
+          var targetLon = Number(card.dataset.lon);
+          var a = Math.pow(Math.sin((targetLat - lat) * rad / 2), 2) +
+            Math.cos(lat * rad) * Math.cos(targetLat * rad) * Math.pow(Math.sin((targetLon - lon) * rad / 2), 2);
+          return { card: card, distance: 6371 * 2 * Math.asin(Math.sqrt(Math.min(1, a))) };
+        }).sort(function (a, b) { return a.distance - b.distance; }).slice(0, 3);
+        statusKey = ranked.length ? 'locationFound' : 'locationUnavailable';
+        button.disabled = false;
+        render();
+      }, function (error) {
+        statusKey = error.code === 1 ? 'locationDenied' : 'locationUnavailable';
+        button.disabled = false;
+        render();
+      }, { enableHighAccuracy: false, timeout: 12000, maximumAge: 300000 });
+    });
+    document.addEventListener('aidi:lang', render);
   }
 
   /* ------------------------------------------------------------ reveals -- */
@@ -693,8 +783,30 @@
     var release = function () {
       risers.concat(wipes, clips).forEach(function (el) { el.classList.add('is-in'); });
     };
-    setTimeout(release, 2500);
     window.addEventListener('beforeprint', release);
+
+    /* Failsafe, but a precise one. A blanket timer would reveal everything a
+       few seconds after load and quietly defeat the scroll reveal for anyone
+       reading slowly. Instead, watch a sentinel that is unquestionably in the
+       viewport: if the observer never reports even that, it is not running in
+       this environment (a headless renderer, a never-painted tab) and only
+       then is everything released. */
+    var sentinel = document.createElement('div');
+    sentinel.setAttribute('aria-hidden', 'true');
+    sentinel.style.cssText = 'position:fixed;top:50%;left:0;width:1px;height:1px;opacity:0;pointer-events:none';
+    document.body.appendChild(sentinel);
+
+    var observerWorks = false;
+    var probe = new IntersectionObserver(function (entries) {
+      if (entries.some(function (e) { return e.isIntersecting; })) observerWorks = true;
+    });
+    probe.observe(sentinel);
+
+    setTimeout(function () {
+      probe.disconnect();
+      sentinel.remove();
+      if (!observerWorks) release();
+    }, 1500);
   }
 
   /* ------------------------------------------------- deep-linked details -- */
@@ -730,7 +842,7 @@
     /* Each feature is isolated: if one throws on a page that does not carry it,
        navigation, language switching and the rest still come up. */
     [applyLangSafe, initHeader, initLangMenu, initHero, initAnalyser, initFilters,
-     initCompare, initDealerSearch, initReveal, initDeepLink].forEach(function (fn) {
+     initCompare, initDealerSearch, initNearbyDealers, initReveal, initDeepLink].forEach(function (fn) {
       try { fn(); } catch (e) {
         if (window.console && console.warn) console.warn('AIDI: ' + fn.name + ' failed', e);
       }

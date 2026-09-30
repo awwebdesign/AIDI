@@ -10,10 +10,10 @@ index.html          Home
 concept.html        AIDI Concept
 voeders.html        10 feeds: filter, expand, compare
 supplementen.html   14 supplements: filter, expand
-equipment.html      3 equipment lines
+equipment.html      2 equipment lines
 systeem.html        14 feeding schedules (PDF)
 team.html           Team Noël-Willockx + full results
-verkooppunten.html  Searchable stockist list, 11 countries
+verkooppunten.html  Searchable stockists + nearby recommendations, 11 countries
 contact.html        Contact + international distributors
 
 style.css           All styling. Tokens at the top, see DESIGN.md.
@@ -84,6 +84,13 @@ can be edited by hand; just keep the `data-i18n` attributes intact, since the
 language switcher uses them.
 
 ## Dealers on a map
+
+The stockist page also uses `assets/geo.json` at build time to recommend the
+three closest shops after a visitor clicks “Gebruik mijn locatie”. Browser
+location requires HTTPS (or localhost). Coordinates are held only in page
+memory; distances are labelled as straight-line estimates. Dealers without
+coordinates remain searchable in the full list. Rebuild after updating the
+coordinate file.
 
 `geocode.mjs` looks up one coordinate per dealer through OpenStreetMap's
 Nominatim service and caches the result in `assets/geo.json`. After adding a

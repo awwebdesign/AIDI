@@ -772,6 +772,22 @@ button { cursor: pointer; }
 
 .filters__count { margin-inline-start: auto; font-size: var(--small); color: var(--ink-3); }
 
+/* Feed choices stay on separate, labelled lines, with an explicit selected mark. */
+[data-filters='feed-list'] { align-items: start; padding: 1.25rem; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); }
+[data-filters='feed-list'] .filters__group { width: 100%; gap: 0.5rem; }
+[data-filters='feed-list'] .filters__group[hidden] { display: none; }
+[data-filters='feed-list'] .filters__label { flex-basis: 100%; margin-bottom: 0.15rem; font-size: var(--small); text-transform: none; letter-spacing: 0; color: var(--ink); }
+.chip { min-height: 44px; }
+[data-filters='feed-list'] .chip::before { content: ''; display: inline-block; width: 0.8em; margin-right: 0.4em; }
+[data-filters='feed-list'] .chip[aria-pressed='true']::before { content: '✓'; }
+.filters__help { width: 100%; font-size: var(--small); color: var(--ink-2); }
+[data-filters='feed-list'] .filters__count { margin-inline-start: 0; align-self: center; margin-right: auto; }
+.no-js .filters, .no-js .js-only { display: none; }
+.mix-overview { display: grid; gap: 1.3rem; margin-top: 1.35rem; }
+.mix-overview__item { display: block; color: var(--ink); padding-block: 0.35rem 1rem; border-bottom: 1px solid var(--line); }
+.mix-overview__item:hover { color: var(--signal-ink); }
+.mix-overview__item > div { flex-wrap: wrap; }
+
 /* ------------------------------------------------------- 13. product rows -- */
 /* A dense, scannable list. Rows, not a card grid: a fancier compares mixes,
    and rows put the numbers in shared columns where comparison is possible. */
@@ -1358,6 +1374,9 @@ th[aria-sort='ascending'] .sortable svg { transform: rotate(180deg); }
   border-top: 1px solid var(--line);
 }
 .gear h2 { font-size: clamp(1.55rem, 1.25rem + 1.3vw, 2.15rem); }
+.gear > * { min-width: 0; }
+.gear h2 { overflow-wrap: anywhere; }
+.gear .media img { object-fit: contain; height: auto; width: 100%; }
 
 .media--mark {
   display: grid; place-items: center;
@@ -1370,6 +1389,22 @@ th[aria-sort='ascending'] .sortable svg { transform: rotate(180deg); }
 .media--mark svg { width: 42%; }
 
 table.compare--slim { min-width: 28rem; }
+table.feeder-specs { min-width: 0; width: 100%; table-layout: fixed; }
+table.feeder-specs th, table.feeder-specs td { white-space: normal; overflow-wrap: anywhere; padding: 0.85rem 0.5rem; }
+table.feeder-specs th:first-child, table.feeder-specs td:first-child { min-width: 0; }
+@media (max-width: 480px) {
+  table.feeder-specs th, table.feeder-specs td { padding: 0.7rem 0.3rem; font-size: 0.8rem; }
+}
+
+.nearby { padding: clamp(1.2rem, 3vw, 2rem); margin-bottom: 2rem; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); }
+.nearby > p { margin-block: 0.75rem 1rem; max-width: var(--measure); color: var(--ink-2); }
+.nearby [data-location-status]:empty { display: none; }
+.nearby .dealers { margin-top: 1.25rem; }
+.nearby [hidden] { display: none; }
+.nearby .btn:disabled { opacity: 0.65; cursor: wait; }
+.dealer__distance { font-size: var(--small); font-weight: 650; color: var(--navy); margin-bottom: 0.65rem; }
+.nearby .arrow-link { margin-top: 1rem; }
+.dealer__links a { overflow-wrap: anywhere; }
 
 /* ----------------------------------------------------------- 29. contact -- */
 .contact-grid { display: grid; gap: 0.9rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); }
@@ -1423,17 +1458,26 @@ table.compare--slim { min-width: 28rem; }
 /* =============================================== 32. entrance animation -- */
 /* The hero arrives in one orchestrated sequence rather than a fade bolted on
    to every section. As everywhere else, the stylesheet hides nothing on its
-   own: script.js adds .anim-in once it has confirmed the hero is present, and
-   a failsafe removes the held state regardless. */
+   own: script.js adds .is-armed and then .anim-in, and a failsafe removes the
+   held state regardless.
+
+   How much things travel is a variable, not a separate rule. Reduced motion
+   sets the travel to zero further down, which leaves the fade intact without
+   any second set of selectors fighting these on specificity. */
 
 .hero__h1 .hero__line { display: block; overflow: hidden; }
-.js .hero.is-armed .hero__h1 .hero__line > * { display: inline-block; transform: translateY(105%); }
+.js .hero.is-armed .hero__h1 .hero__line > * {
+  display: inline-block;
+  transform: translateY(var(--travel-line, 105%));
+  opacity: var(--held-opacity, 1);
+}
 .hero.anim-in .hero__h1 .hero__line > * {
   transform: none;
-  transition: transform 950ms cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 1;
+  transition: transform 950ms cubic-bezier(0.16, 1, 0.3, 1), opacity 620ms var(--ease);
 }
 
-.js .hero.is-armed [data-hero] { opacity: 0; transform: translateY(14px); }
+.js .hero.is-armed [data-hero] { opacity: 0; transform: translateY(var(--travel-y, 14px)); }
 .hero.anim-in [data-hero] {
   opacity: 1; transform: none;
   transition: opacity 780ms var(--ease), transform 820ms var(--ease);
@@ -1443,7 +1487,10 @@ table.compare--slim { min-width: 28rem; }
 .hero.anim-in [data-hero="3"] { transition-delay: 420ms; }
 
 /* The wing watermark drifts in behind the headline. */
-.js .hero.is-armed .hero__mark { opacity: 0; transform: translate(2%, -2%) scale(1.06); }
+.js .hero.is-armed .hero__mark {
+  opacity: 0;
+  transform: translate(var(--travel-mark, 2%), calc(var(--travel-mark, 2%) * -1)) scale(var(--travel-scale, 1.06));
+}
 .hero.anim-in .hero__mark {
   opacity: 1; transform: none;
   transition: opacity 1600ms var(--ease) 200ms, transform 2200ms var(--ease) 200ms;
@@ -1491,52 +1538,63 @@ table.compare--slim { min-width: 28rem; }
 
 /* ================================================= 34. text reveals -- */
 /* Two registers, deliberately unalike. A page title wipes up out of its own
-   mask; a section heading and its lede rise softly, a beat apart. Both are
-   applied by script.js only to elements that start below the fold, and the
-   same failsafe releases them. */
+   mask; a section heading and its lede rise softly, a beat apart. script.js
+   applies these only to elements that start below the fold, or plays them
+   once on load for the ones above it, and the same failsafe releases them.
+
+   Travel is a variable here too, so the reduced-motion alternative is a
+   one-line change rather than a competing rule. */
 
 .rv-mask { overflow: hidden; }
 .rv-mask > span { display: block; }
 
-.wipe > span { transform: translateY(102%); }
+.wipe > span {
+  transform: translateY(var(--travel-wipe, 102%));
+  opacity: var(--held-opacity, 1);
+}
 .wipe.is-in > span {
   transform: none;
-  transition: transform 880ms cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 1;
+  transition: transform 880ms cubic-bezier(0.16, 1, 0.3, 1), opacity 560ms var(--ease);
 }
 
 /* The softer register: heading first, lede a beat later. */
-.pagehead .rise, .head__text .rise { opacity: 0; transform: translateY(10px); }
-.pagehead .rise.is-in, .head__text .rise.is-in {
+.rise { opacity: 0; transform: translateY(var(--travel-y, 10px)); }
+.rise.is-in {
   opacity: 1; transform: none;
   transition: opacity 620ms var(--ease), transform 680ms var(--ease);
   transition-delay: var(--delay, 0ms);
 }
 
 
-
 /* ================================= 35. reduced motion: fade, not freeze -- */
-/* The preference is about movement, not about content appearing. Everything
-   that would slide, wipe or drift instead crossfades in place, so a visitor
-   with effects switched off still sees the page arrive, just without any
-   travel. This is the alternative the guidance asks for; it is not an
-   override of the preference. */
+/* The preference is about movement, not about content appearing. Setting the
+   travel variables to zero removes every slide, wipe and drift while leaving
+   the crossfade, which is the alternative the guidance asks for. The second
+   rule gives those fades their duration back, because the blanket rule in
+   section 23 flattens every transition on the page. */
 
 @media (prefers-reduced-motion: reduce) {
-  :root:not([data-motion='on']) .rise,
-  :root:not([data-motion='on']) .wipe > span,
-  :root:not([data-motion='on']) .hero.is-armed [data-hero],
-  :root:not([data-motion='on']) .hero.is-armed .hero__h1 .hero__line > *,
-  :root:not([data-motion='on']) .hero.is-armed .hero__mark {
-    transform: none !important;
-    opacity: 0;
-    transition: opacity 520ms ease !important;
+  :root:not([data-motion='on']) {
+    --travel-y: 0px;
+    --travel-line: 0%;
+    --travel-wipe: 0%;
+    --travel-mark: 0%;
+    --travel-scale: 1;
+    --held-opacity: 0;
   }
+  :root:not([data-motion='on']) .rise,
   :root:not([data-motion='on']) .rise.is-in,
+  :root:not([data-motion='on']) .wipe > span,
   :root:not([data-motion='on']) .wipe.is-in > span,
+  :root:not([data-motion='on']) .hero.is-armed [data-hero],
   :root:not([data-motion='on']) .hero.anim-in [data-hero],
+  :root:not([data-motion='on']) .hero.is-armed .hero__h1 .hero__line > *,
   :root:not([data-motion='on']) .hero.anim-in .hero__h1 .hero__line > *,
+  :root:not([data-motion='on']) .hero.is-armed .hero__mark,
   :root:not([data-motion='on']) .hero.anim-in .hero__mark {
-    opacity: 1;
+    transition-duration: 560ms !important;
+    transition-delay: var(--delay, 0ms) !important;
   }
   /* The macro bar wipe is a size change, so it simply appears drawn. */
   :root:not([data-motion='on']) .macro__track.clip { clip-path: inset(0 0 0 0 round 99px) !important; }

@@ -127,7 +127,6 @@ const EQUIPMENT = [
       { size: 'X-Large', birds: 60, length: '190 cm', feed: '20 kg' }
     ]
   },
-  { slug: 'aidi-nestkartons', img: 'aidi-nestkartons', specs: [] },
   { slug: 'aidi-manden', img: null, specs: [] }
 ];
 

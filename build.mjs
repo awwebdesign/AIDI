@@ -43,6 +43,7 @@ const {
 );
 
 const NL = I18N.nl;
+const GEO = JSON.parse(readFileSync('assets/geo.json', 'utf8'));
 const esc = (s) => String(s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
   .replace(/"/g, '&quot;');
@@ -396,7 +397,7 @@ function pagehead(key, crumbLabel, narrow = false) {
 
 function filterBar(target, groups) {
   const group = (facet, labelKey, values) => `
-        <div class="filters__group" role="group" aria-label="${esc(nl(labelKey))}">
+        <div class="filters__group" role="group" aria-label="${esc(nl(labelKey))}" data-i18n-attr="aria-label:${labelKey}">
           <span class="field-label filters__label" data-i18n="${labelKey}">${esc(nl(labelKey))}</span>
           <button type="button" class="chip" data-facet="${facet}" data-value="" aria-pressed="true" data-i18n="ui.all">${esc(nl('ui.all'))}</button>
           ${values.map(([v, k]) => `<button type="button" class="chip" data-facet="${facet}" data-value="${v}" aria-pressed="false" data-i18n="${k}">${esc(nl(k))}</button>`).join('\n          ')}
@@ -404,7 +405,9 @@ function filterBar(target, groups) {
 
   return `      <div class="filters" data-filters="${target}">
         ${groups.map(([facet, labelKey, values]) => group(facet, labelKey, values)).join('\n')}
-        <span class="filters__count" data-count></span>
+        ${target === 'feed-list' ? T('voeders.filterHelp', 'p', 'class="filters__help"') : ''}
+        <span class="filters__count" data-count role="status" aria-live="polite"></span>
+        <button type="button" class="btn btn--outline btn--sm" data-filter-reset hidden data-i18n="ui.reset">${esc(nl('ui.reset'))}</button>
       </div>`;
 }
 
@@ -437,9 +440,7 @@ function homeBody() {
             <span class="arrow-link"><span data-i18n="home.seasonCta">${esc(nl('home.seasonCta'))}</span>${ICON.arrowRight}</span>
           </a>`).join('');
 
-  /* Three mixes whose profiles differ most, the concept in one picture. */
-  const compareSet = ['aidi-speedy-sprint', 'aidi-mix-2', 'aidi-long-distance-mix']
-    .map((slug) => FEEDS.find((f) => f.slug === slug));
+  const compareSet = FEEDS;
 
   const ranges = [
     ['voeders', 'voeders.html', 'aidi-mix-3', FEEDS.length],
@@ -459,7 +460,7 @@ function homeBody() {
         </div>
         <div class="facts" data-hero="3">
           <div class="fact"><b class="fact__n" data-count="45" data-dec="0">45</b>${T('home.fact1', 'span', 'class="fact__t"')}</div>
-          <div class="fact"><b class="fact__n" data-count="27" data-dec="0">27</b>${T('home.fact2', 'span', 'class="fact__t"')}</div>
+          <div class="fact"><b class="fact__n" data-count="${FEEDS.length + SUPPLEMENTS.length + EQUIPMENT.length}" data-dec="0">${FEEDS.length + SUPPLEMENTS.length + EQUIPMENT.length}</b>${T('home.fact2', 'span', 'class="fact__t"')}</div>
           <div class="fact"><b class="fact__n" data-count="11" data-dec="0">11</b>${T('home.fact3', 'span', 'class="fact__t"')}</div>
           <div class="fact"><b class="fact__n" data-count="5166" data-dec="0">${N(5166, 0)}</b>${T('home.fact4', 'span', 'class="fact__t"')}</div>
         </div>
@@ -509,7 +510,7 @@ function homeBody() {
   </section>
 
   <section class="section">
-    <div class="wrap split split--wide-media">
+    <div class="wrap split split--wide-media split--top">
       <div>
         ${T('home.conceptTitle', 'h2')}
         <div class="prose" style="margin-top:1.25rem">
@@ -521,14 +522,14 @@ function homeBody() {
       </div>
       <div>
         <h3 data-i18n="home.conceptCompare">${esc(nl('home.conceptCompare'))}</h3>
-        <div style="display:grid;gap:1.5rem;margin-top:1.35rem" data-stagger>
-          ${compareSet.map((f) => `<div data-rise>
+        <div class="mix-overview" data-stagger>
+          ${compareSet.map((f) => `<a class="mix-overview__item" href="voeders.html#${f.slug}" data-rise>
             <div style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:0.55rem">
               <b style="font-weight:650" data-i18n="p.${f.slug}.name">${esc(NL.p[f.slug].name)}</b>
               <span class="field-label">${N(f.macro.kcal, 0)} ${esc(nl('spec.kcalUnit'))}</span>
             </div>
             ${macroBar(f.macro)}
-          </div>`).join('\n          ')}
+          </a>`).join('\n          ')}
         </div>
         ${T('home.conceptCompareNote', 'p', 'class="field-label" style="margin-top:1.5rem;line-height:1.5;text-transform:none;letter-spacing:0"')}
       </div>
@@ -770,7 +771,7 @@ ${cta()}`;
 function equipmentBody() {
   const feeder = EQUIPMENT[0];
   const specTable = `<div class="table-scroll" style="margin-top:1.5rem">
-          <table class="compare compare--slim">
+          <table class="compare compare--slim feeder-specs">
             <thead><tr>
               <th scope="col" data-i18n="equipment.specSize">${esc(nl('equipment.specSize'))}</th>
               <th scope="col" data-i18n="equipment.specBirds">${esc(nl('equipment.specBirds'))}</th>
@@ -820,7 +821,8 @@ function systeemBody() {
   const groups = [
     ['systeem.generalT', PLANS.filter((p) => p.phase === 'algemeen')],
     ['systeem.flightT', PLANS.filter((p) => p.phase === 'vlucht')],
-    ['systeem.breedT', PLANS.filter((p) => p.phase === 'kweek' || p.phase === 'rui')],
+    ['systeem.breedT', PLANS.filter((p) => p.phase === 'kweek')],
+    ['systeem.moultT', PLANS.filter((p) => p.phase === 'rui')],
     ['systeem.restT', PLANS.filter((p) => p.phase === 'winter')]
   ];
 
@@ -912,6 +914,9 @@ ${cta()}`;
 /* ----------------------------------------------------- verkooppunten -- */
 
 function dealerCard(d) {
+  const geo = GEO[d.name];
+  const coords = geo && Number.isFinite(geo.lat) && Number.isFinite(geo.lon)
+    ? ` data-lat="${geo.lat}" data-lon="${geo.lon}"` : '';
   const find = [d.name, d.city, d.zip, d.street].filter(Boolean).join(' ').toLowerCase();
   const addr = [d.street, [d.zip, d.city].filter(Boolean).join(' ')].filter(Boolean).join('<br>');
   const links = [];
@@ -920,7 +925,7 @@ function dealerCard(d) {
   if (d.web) links.push(`<a href="${esc(d.web)}" target="_blank" rel="noopener noreferrer" data-i18n="ui.website">${esc(nl('ui.website'))}</a>`);
   const noteKey = d.note === 'order' ? 'ui.orderOnly' : d.note === 'appointment' ? 'ui.byAppointment' : null;
 
-  return `        <article class="dealer" data-find="${esc(find)}">
+  return `        <article class="dealer" data-find="${esc(find)}"${coords}>
           <h3>${esc(d.name)}</h3>
           ${addr ? `<address>${addr}</address>` : ''}
           ${links.length ? `<div class="dealer__links">${links.join('')}</div>` : ''}
@@ -948,6 +953,13 @@ ${list.map(dealerCard).join('\n')}
 
   <section class="section section--flush-top">
     <div class="wrap">
+      <div class="nearby js-only">
+        ${T('verkooppunten.nearbyTitle', 'h2')}
+        ${T('verkooppunten.nearbyHelp', 'p')}
+        <button class="btn btn--primary" type="button" data-locate data-i18n="verkooppunten.locate">${esc(nl('verkooppunten.locate'))}</button>
+        <p data-location-status role="status" aria-live="polite"></p>
+        <div class="dealers" data-nearby hidden></div>
+      </div>
       <div class="finder">
         <div class="search">
           ${ICON.search}
