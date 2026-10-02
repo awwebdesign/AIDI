@@ -16,7 +16,7 @@ A secondary audience reads over their shoulder: top lofts already chasing nation
 
 ## Product Purpose
 
-AIDI is the feed and supplement range built by Team Noël-Willockx. Eddy Noël brings 45 years as a specialist pigeon nutritionist, and Ivan Willockx, ex-professional footballer turned pigeon broker. Ten racing and breeding mixes, fourteen supplements, three equipment lines, sold through roughly thirty-five Belgian shops and distributors in the Netherlands, Germany, UK, France, Italy, Hungary, Croatia, USA, Czechia and Poland.
+AIDI is the feed and supplement range built by Team Noël-Willockx. Eddy Noël brings 45 years as a specialist pigeon nutritionist, and Ivan Willockx, ex-professional footballer turned pigeon broker. Ten racing and breeding mixes, fourteen supplements, two equipment lines, sold through roughly thirty-five Belgian shops and distributors in the Netherlands, Germany, UK, France, Italy, Hungary, Croatia, USA, Czechia and Poland.
 
 The site exists to move a fancier from curiosity to a considered choice of product, and then to a shop that stocks it. Success is a visitor who understands *which* AIDI product fits their situation and why, not one who has merely read that AIDI is good.
 
@@ -30,7 +30,7 @@ AIDI publishes the numbers nobody else in pigeon sport publishes: measured fat, 
 - Secondary CTA: find a stockist (thirty-five Belgian shops, distributors in ten more countries), or call Eddy and Ivan directly.
 - The line a visitor remembers after ten seconds: every AIDI mix comes with its numbers.
 - Belief ladder: (1) a racing pigeon is an athlete and diet decides performance; (2) AIDI knows this more precisely than the competition, and proves it with published analytical values; (3) the range is a system rather than a shelf, with a right product for this week of the season and this distance; (4) the results of lofts using it are real and national; (5) I can get it near me.
-- Proof on hand: KBDB National Ace Pigeons over many years (1st Nat. Ace Long Distance Old Birds 2022 – Roziers-Xiang; 1st Nat. Ace GMD Young Birds 2021; 1st Nat. Brive 3,755 birds 2020; 1st Nat. Ace Middle Distance Young Birds 2010). 2022 highlights including 1st Nat. Argenton against 5,166 birds, 15× top-100 national. Fourteen published feeding schedules. Full analytical data per product. Team photo, product photography for 26 of 27 products, dealer list across eleven countries.
+- Proof on hand: KBDB National Ace Pigeons over many years (1st Nat. Ace Long Distance Old Birds 2022 – Roziers-Xiang; 1st Nat. Ace GMD Young Birds 2021; 1st Nat. Brive 3,755 birds 2020; 1st Nat. Ace Middle Distance Young Birds 2010). 2022 highlights including 1st Nat. Argenton against 5,166 birds, 15× top-100 national. Fourteen published feeding schedules. Full analytical data per product. Team photo, product photography for 25 of 26 products, dealer list across eleven countries.
 
 ## Brand Personality
 

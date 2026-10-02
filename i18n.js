@@ -106,6 +106,13 @@ I18N.nl = {
   },
 
   home: {
+    heroFinal: "Voeder ze ernaar.",
+    heroPunctuation: ".",
+    featuredLabel: "In beeld:",
+    seasonWinterWhen: "nov – dec",
+    seasonKweekWhen: "jan – mrt",
+    seasonVluchtWhen: "apr – aug",
+    seasonRuiWhen: "aug – okt",
     title: 'AIDI: voeding voor duivensport | Team Noël-Willockx',
     meta: 'Tien mengelingen en veertien supplementen voor duivensport, elk met de gemeten analytische waarden. Ontwikkeld door Team Noël-Willockx, 45 jaar voedingsexpertise.',
     h1a: 'Uw duiven zijn ',
@@ -124,7 +131,7 @@ I18N.nl = {
     seasonLede: 'Het gamma volgt het seizoen. Elke fase stelt andere eisen aan brandstof, bouwstoffen en herstel, en dus een andere mengeling.',
     seasonWinterD: 'Veel ruwvezel, weinig vet. Ongelimiteerd te voederen zonder dat duiven aanvetten.',
     seasonKweekD: 'Hoog gediversifieerd opneembaar eiwit voor de jongen, zonder de ouderdieren uit te putten.',
-    seasonVluchtD: 'Vijf vliegmengelingen, van snelheidsvlucht tot overnachtfond. Elk met een eigen macroprofiel.',
+    seasonVluchtD: 'Zes vliegmengelingen, van snelheidsvlucht tot overnachtfond. Elk met een eigen macroprofiel.',
     seasonRuiD: 'Verhoogd aandeel aminozuren en een goede omega-verhouding voor een vlekkeloze pluimkwaliteit.',
     seasonCta: 'Bekijk de mengelingen',
 
@@ -711,6 +718,13 @@ I18N.fr = {
   },
 
   home: {
+    heroFinal: "Nourrissez-les comme tels.",
+    heroPunctuation: ".",
+    featuredLabel: "À l’image :",
+    seasonWinterWhen: "nov. – déc.",
+    seasonKweekWhen: "janv. – mars",
+    seasonVluchtWhen: "avr. – août",
+    seasonRuiWhen: "août – oct.",
     title: 'AIDI: alimentation pour le sport colombophile | Team Noël-Willockx',
     meta: "Dix mélanges et quatorze suppléments pour le sport colombophile, chacun avec ses valeurs analytiques mesurées. Développés par Team Noël-Willockx, 45 ans d'expertise en nutrition.",
     h1a: 'Vos pigeons sont des ',
@@ -729,7 +743,7 @@ I18N.fr = {
     seasonLede: "La gamme suit la saison. Chaque phase impose d'autres exigences en carburant, en matériaux de construction et en récupération, et demande donc un autre mélange.",
     seasonWinterD: "Beaucoup de fibres brutes, peu de graisse. À volonté, sans que les pigeons ne s'engraissent.",
     seasonKweekD: 'Protéines assimilables élevées et diversifiées pour les jeunes, sans épuiser les reproducteurs.',
-    seasonVluchtD: 'Cinq mélanges de vol, de la vitesse au fond de nuit. Chacun avec son propre profil.',
+    seasonVluchtD: 'Six mélanges de vol, de la vitesse au fond de nuit. Chacun avec son propre profil.',
     seasonRuiD: "Part accrue d'acides aminés et bon rapport oméga pour un plumage impeccable.",
     seasonCta: 'Voir les mélanges',
 
@@ -1311,6 +1325,13 @@ I18N.en = {
   },
 
   home: {
+    heroFinal: "Feed them like it.",
+    heroPunctuation: ".",
+    featuredLabel: "Pictured:",
+    seasonWinterWhen: "Nov – Dec",
+    seasonKweekWhen: "Jan – Mar",
+    seasonVluchtWhen: "Apr – Aug",
+    seasonRuiWhen: "Aug – Oct",
     title: 'AIDI: nutrition for pigeon racing | Team Noël-Willockx',
     meta: 'Ten mixtures and fourteen supplements for pigeon racing, each with its measured analytical values. Developed by Team Noël-Willockx, 45 years of nutritional expertise.',
     h1a: 'Your pigeons are ',
@@ -1329,7 +1350,7 @@ I18N.en = {
     seasonLede: 'The range follows the season. Every phase places different demands on fuel, building blocks and recovery, and therefore needs a different mixture.',
     seasonWinterD: 'High in crude fibre, low in fat. Can be fed without limit and the birds will not run to fat.',
     seasonKweekD: 'High, diversified absorbable protein for the youngsters, without draining the breeders.',
-    seasonVluchtD: 'Five racing mixtures, from sprint to overnight long distance. Each with its own macro profile.',
+    seasonVluchtD: 'Six racing mixtures, from sprint to overnight long distance. Each with its own macro profile.',
     seasonRuiD: 'Raised amino acid content and a good omega ratio for flawless feather quality.',
     seasonCta: 'View the mixtures',
 
@@ -1911,6 +1932,13 @@ I18N.de = {
   },
 
   home: {
+    heroFinal: "Füttern Sie danach.",
+    heroPunctuation: ".",
+    featuredLabel: "Im Bild:",
+    seasonWinterWhen: "Nov. – Dez.",
+    seasonKweekWhen: "Jan. – März",
+    seasonVluchtWhen: "Apr. – Aug.",
+    seasonRuiWhen: "Aug. – Okt.",
     title: 'AIDI: Ernährung für den Taubensport | Team Noël-Willockx',
     meta: 'Zehn Mischungen und vierzehn Ergänzungen für den Taubensport, jeweils mit den gemessenen analytischen Werten. Entwickelt von Team Noël-Willockx, 45 Jahre Ernährungsexpertise.',
     h1a: 'Ihre Tauben sind ',
@@ -1929,7 +1957,7 @@ I18N.de = {
     seasonLede: 'Das Sortiment folgt der Saison. Jede Phase stellt andere Anforderungen an Brennstoff, Baustoffe und Erholung, und braucht deshalb eine andere Mischung.',
     seasonWinterD: 'Viel Rohfaser, wenig Fett. Unbegrenzt zu füttern, ohne dass die Tauben verfetten.',
     seasonKweekD: 'Hoher, breit gefächerter Anteil verwertbaren Proteins für die Jungen, ohne die Zuchttiere auszuzehren.',
-    seasonVluchtD: 'Fünf Flugmischungen, vom Schnelligkeitsflug bis zum Übernachtflug. Jede mit eigenem Makroprofil.',
+    seasonVluchtD: 'Sechs Flugmischungen, vom Schnelligkeitsflug bis zum Übernachtflug. Jede mit eigenem Makroprofil.',
     seasonRuiD: 'Erhöhter Aminosäureanteil und ein gutes Omega-Verhältnis für makellose Gefiederqualität.',
     seasonCta: 'Mischungen ansehen',
 
@@ -2511,6 +2539,13 @@ I18N.zh = {
   },
 
   home: {
+    heroFinal: "请按此喂养。",
+    heroPunctuation: "。",
+    featuredLabel: "图中：",
+    seasonWinterWhen: "11月–12月",
+    seasonKweekWhen: "1月–3月",
+    seasonVluchtWhen: "4月–8月",
+    seasonRuiWhen: "8月–10月",
     title: 'AIDI: 赛鸽运动营养 | Team Noël-Willockx',
     meta: '十款饲料与十四款补充剂，每一款都附有实测分析数值。由 Team Noël-Willockx 研制，四十五年营养专业经验。',
     h1a: '您的鸽子是',
@@ -2529,7 +2564,7 @@ I18N.zh = {
     seasonLede: '产品线随赛季而变。每个阶段对燃料、构建物质与恢复的要求都不同，因此需要不同的配方。',
     seasonWinterD: '粗纤维高、脂肪低。可以不限量投喂而不会让鸽子发胖。',
     seasonKweekD: '为幼鸽提供高含量、多来源的可吸收蛋白，同时不消耗种鸽。',
-    seasonVluchtD: '五款比赛配方，从短距离到过夜长距离。各有独立的营养结构。',
+    seasonVluchtD: '六款比赛配方，从短距离到过夜长距离。各有独立的营养结构。',
     seasonRuiD: '提高氨基酸比例并保持良好的 Omega 比例，换出完美羽质。',
     seasonCta: '查看配方',
 

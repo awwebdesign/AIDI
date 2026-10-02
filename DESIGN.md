@@ -94,11 +94,13 @@ gap over a coloured container, so a short final row does not leave a grey hole.
 
 - **`.macro`**: the fingerprint. A segmented fat/protein/carbohydrate bar
   with three separated bands, each labelled with its true published value.
-- **`.analyser`**: the hero readout, cycling the range so the central claim
-  is demonstrated rather than asserted. Pauses on hover, focus and hidden tabs.
+- **`.hero--grain`**: selected Hero A from the demos: a full-width Mix 3
+  photograph, three headline lines and a bottom strip with the published
+  nutritional values and a link to the featured mixture.
 - **`.spec`**: the seven analytical values as a proper readout.
-- **`.season`**: the pigeon year as a numbered sequence. This is the one
-  place numbering is used, and it is used because the order is the content.
+- **`.season-timeline`**: selected Season 1 from the demos: four numbered
+  phases connected by a rail, horizontal on desktop and vertical on mobile.
+  Each phase links to the corresponding feed filter.
 - **`.compare`**: sortable table across all ten mixtures.
 
 ## Motion
@@ -106,11 +108,16 @@ gap over a coloured container, so a short final row does not leave a grey hole.
 Exponential ease-out (`--ease: cubic-bezier(0.16, 1, 0.3, 1)`), no bounce.
 Durations `--t-fast` 140ms, `--t` 260ms, `--t-slow` 620ms.
 
-Motion never gates content. Nothing is hidden by the stylesheet: `script.js`
-adds `.rise` / `.clip` only to elements that are genuinely below the fold at
-load, and a 2.5s timer plus a `beforeprint` handler guarantee the class comes
-off. A missing IntersectionObserver, a hidden tab, a headless renderer or a
-print job all show the complete page.
+Motion never gates content. `script.js` adds text reveal states with observer
+fallbacks and a `beforeprint` release. Nutrient bars use Hero C's animation:
+each segment grows from its left edge over 800ms, with a 260ms lead-in and
+a fixed 60ms stagger per product. Profile rows remain visible during the draw.
+Hero A uses its own 1100ms bar wipe after 520ms, with figures counting over
+1100ms after 380ms, and 900ms headline reveals spaced by 90ms.
+The timeline draws over 1400ms and lights its nodes
+in sequence. These use temporary Web Animations effects over fully visible
+default styles. Reduced motion skips the segment growth, rail drawing and
+hero photo zoom; printing cancels any active data animations.
 
 Layout properties are not animated. The header keeps a constant height and
 scales the wordmark with a transform instead.

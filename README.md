@@ -62,7 +62,7 @@ To add a stockist, add an entry to `DEALERS` in `data.js` and run the build.
 
 ## Rebuilding the HTML
 
-The nine HTML files are generated from `data.js` + `i18n.js` so that 27
+The nine HTML files are generated from `data.js` + `i18n.js` so that 26
 products across 9 pages in 5 languages cannot drift out of step. After editing
 either file:
 
@@ -108,7 +108,8 @@ email address, no street address, so they appear in a list rather than as a pin.
 
 The site honours `prefers-reduced-motion`. On Windows, switching off Settings,
 Accessibility, Visual effects, Animation effects sets that preference, and the
-hero then stops rotating on its own and the entrance animations do not play.
+hero photo stays still and the nutritional bars and season timeline appear
+fully drawn.
 That is deliberate. The two proposal pages carry an "Animaties forceren"
 checkbox so the motion can still be reviewed on such a machine; the live site
 has no override.

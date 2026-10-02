@@ -686,7 +686,7 @@ button { cursor: pointer; }
   border-radius: 99px;
 }
 
-.macro__seg { height: 100%; min-width: 4px; flex-shrink: 1; border-radius: 99px; }
+.macro__seg { height: 100%; min-width: 4px; flex-shrink: 1; border-radius: 99px; transform-origin: left center; }
 .macro__seg--fat  { background: var(--m-fat); }
 .macro__seg--pro  { background: var(--m-pro); }
 .macro__seg--carb { background: var(--m-carb); }
@@ -784,8 +784,8 @@ button { cursor: pointer; }
 [data-filters='feed-list'] .filters__count { margin-inline-start: 0; align-self: center; margin-right: auto; }
 .no-js .filters, .no-js .js-only { display: none; }
 .mix-overview { display: grid; gap: 1.3rem; margin-top: 1.35rem; }
-.mix-overview__item { display: block; color: var(--ink); padding-block: 0.35rem 1rem; border-bottom: 1px solid var(--line); }
-.mix-overview__item:hover { color: var(--signal-ink); }
+.mix-overview__item { display: block; color: var(--ink); padding: 0.55rem 0.65rem 1rem; border-bottom: 1px solid var(--line); border-radius: var(--r-sm); transition: background-color var(--t-fast) var(--ease); }
+.mix-overview__item:hover, .mix-overview__item:focus-visible { color: var(--signal-ink); background: var(--surface); }
 .mix-overview__item > div { flex-wrap: wrap; }
 
 /* ------------------------------------------------------- 13. product rows -- */
@@ -1474,7 +1474,7 @@ table.feeder-specs th:first-child, table.feeder-specs td:first-child { min-width
 .hero.anim-in .hero__h1 .hero__line > * {
   transform: none;
   opacity: 1;
-  transition: transform 950ms cubic-bezier(0.16, 1, 0.3, 1), opacity 620ms var(--ease);
+  transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .js .hero.is-armed [data-hero] { opacity: 0; transform: translateY(var(--travel-y, 14px)); }
@@ -1598,4 +1598,69 @@ table.feeder-specs th:first-child, table.feeder-specs td:first-child { min-width
   }
   /* The macro bar wipe is a size change, so it simply appears drawn. */
   :root:not([data-motion='on']) .macro__track.clip { clip-path: inset(0 0 0 0 round 99px) !important; }
+}
+
+/* Selected demo: Hero A, full-width grain photograph and analytical strip. */
+.hero.hero--grain {
+  isolation: isolate;
+  padding: 0;
+  min-height: min(86vh, 760px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.hero-grain__media { position: absolute; inset: 0; z-index: -2; overflow: hidden; }
+.hero-grain__media img { width: 100%; height: 100%; object-fit: cover; }
+.hero--grain::before {
+  content: ''; position: absolute; inset: 0; z-index: -1;
+  background:
+    linear-gradient(100deg, oklch(0.185 0.05 264 / 0.96) 0%, oklch(0.185 0.05 264 / 0.9) 42%, oklch(0.185 0.05 264 / 0.58) 78%, oklch(0.185 0.05 264 / 0.42) 100%),
+    linear-gradient(to top, oklch(0.185 0.05 264 / 0.85), transparent 38%);
+}
+.hero-grain__inner { flex: 1; padding-block: clamp(3.5rem, 7vw, 6rem); }
+.hero--grain h1 { font-size: clamp(2.4rem, 1.2rem + 6vw, 5.6rem); line-height: 1.02; letter-spacing: -0.037em; max-width: 18ch; overflow-wrap: break-word; }
+.hero--grain .hero__line > span { padding-bottom: 0.08em; }
+.hero--grain.anim-in .hero__line:nth-child(2) > span { transition-delay: 90ms; }
+.hero--grain.anim-in .hero__line:nth-child(3) > span { transition-delay: 180ms; }
+.hero--grain.anim-in .hero-grain__media img { animation: grain-arrive 2600ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+@keyframes grain-arrive { from { transform: scale(1.12); } to { transform: scale(1); } }
+.hero-grain__strip { border-top: 1px solid oklch(1 0 0 / 0.16); background: oklch(0.185 0.05 264 / 0.7); }
+.hero-grain__striprow { display: flex; align-items: center; gap: clamp(1rem, 3vw, 2.5rem); padding-block: 1rem; }
+.hero-grain__now { font-size: var(--small); color: var(--fg-2); }
+.hero-grain__now a { display: block; color: #fff; }
+.hero-grain__macro { flex: 1; min-width: 0; }
+.hero-grain__energy { display: grid; gap: 0.25rem; }
+.hero-grain__energy strong { white-space: nowrap; font-size: 1.2rem; }
+.hero-grain__energy small { font-size: var(--micro); font-weight: 500; }
+@media (max-width: 760px) {
+  .hero-grain__striprow { flex-wrap: wrap; }
+  .hero-grain__now { flex: 1; }
+  .hero-grain__macro { flex-basis: 100%; order: 3; }
+  .hero-grain__macro .macro__key { gap: 0.5rem 1rem; }
+}
+
+/* Selected demo: Season 1. A horizontal year becomes a vertical timeline on mobile. */
+.season-timeline { position: relative; }
+.season-timeline__rail { position: absolute; left: 0; right: 0; top: 1.55rem; height: 2px; background: var(--line); }
+.season-timeline__rail span { display: block; width: 100%; height: 100%; background: var(--signal-ink); transform-origin: left top; }
+.season-timeline__row { display: grid; gap: clamp(1.5rem, 3vw, 2.5rem); grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.season-timeline__step { position: relative; padding-top: 3.6rem; min-width: 0; }
+.season-timeline__node { position: absolute; top: 0.75rem; left: 0; display: grid; place-items: center; width: 1.65rem; height: 1.65rem; border-radius: 50%; background: var(--surface); border: 2px solid var(--signal-ink); }
+.season-timeline__node i { width: 0.45rem; height: 0.45rem; border-radius: 50%; background: var(--signal-ink); }
+.season-timeline__n { font-size: var(--micro); font-weight: 750; letter-spacing: 0.1em; color: var(--signal-ink); font-variant-numeric: tabular-nums; }
+.season-timeline__when { margin-left: 0.55rem; font-size: var(--micro); color: var(--ink-3); }
+.season-timeline__step h3 { margin-top: 0.35rem; font-size: 1.2rem; }
+.season-timeline__step p { margin-top: 0.5rem; font-size: var(--small); line-height: 1.55; color: var(--ink-3); }
+.season-timeline__step .arrow-link { margin-top: 0.75rem; min-height: 44px; font-size: var(--small); }
+@media (max-width: 819px) {
+  .season-timeline__row { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+  .season-timeline__rail { top: 0.8rem; bottom: 0.8rem; left: 0.8rem; right: auto; width: 2px; height: auto; }
+  .season-timeline__step { padding-top: 0; padding-left: 2.8rem; }
+  .season-timeline__node { top: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero--grain.anim-in .hero-grain__media img { animation: none; }
+}
+@media print {
+  .hero--grain.anim-in .hero-grain__media img { animation: none; }
 }

@@ -1,8 +1,8 @@
 /* AIDI, page generator (development tool).
-   Reads data.js + i18n.js and writes the eight static HTML pages.
+   Reads data.js + i18n.js and writes the nine static HTML pages.
 
    Why a generator: the shipped deliverable is plain HTML/CSS/JS with no
-   runtime dependency, but hand-maintaining 27 products across eight pages
+   runtime dependency, but hand-maintaining 26 products across nine pages
    invites drift. Pages are emitted with Dutch already in the markup and a
    data-i18n key on every string, so the site is complete without JavaScript
    and script.js only has to swap languages.
@@ -424,21 +424,17 @@ function emptyState() {
 /* --------------------------------------------------------------- home -- */
 
 function homeBody() {
-  /* The analyser opens on a mix whose three macro bands are all clearly
-     visible; script.js starts on the same one. */
-  const startIndex = FEEDS.findIndex((f) => f.slug === 'aidi-mix-3');
-  const first = FEEDS[startIndex];
-  const tabs = FEEDS.map((f, i) =>
-    `<button type="button" class="analyser__tab" role="tab" aria-selected="${i === startIndex}" aria-label="${esc(NL.p[f.slug].name)}"><span class="analyser__fill"></span></button>`
-  ).join('\n          ');
-
+  const first = FEEDS.find((feed) => feed.slug === 'aidi-mix-3');
+  const countable = (markup) => markup.replace(/data-num="([^"]+)"/g, 'data-num="$1" data-count="$1"');
   const seasonSteps = PHASES.map((ph, i) => `
-          <a class="season__step" href="voeders.html#${ph}">
-            <span class="season__i">0${i + 1}</span>
-            ${T('phase.' + ph, 'h3')}
-            ${T('home.season' + ph.charAt(0).toUpperCase() + ph.slice(1) + 'D', 'p')}
-            <span class="arrow-link"><span data-i18n="home.seasonCta">${esc(nl('home.seasonCta'))}</span>${ICON.arrowRight}</span>
-          </a>`).join('');
+        <article class="season-timeline__step">
+          <span class="season-timeline__node" aria-hidden="true"><i></i></span>
+          <span class="season-timeline__n">0${i + 1}</span>
+          ${T('home.season' + ph.charAt(0).toUpperCase() + ph.slice(1) + 'When', 'span', 'class="season-timeline__when"')}
+          ${T('phase.' + ph, 'h3')}
+          ${T('home.season' + ph.charAt(0).toUpperCase() + ph.slice(1) + 'D', 'p')}
+          <a class="arrow-link" href="voeders.html#${ph}">${T('home.seasonCta')}${ICON.arrowRight}</a>
+        </article>`).join('');
 
   const compareSet = FEEDS;
 
@@ -448,50 +444,27 @@ function homeBody() {
     ['equipment', 'equipment.html', 'aidi-automatische-voederbakken', EQUIPMENT.length]
   ];
 
-  return `  <section class="hero on-dark">
-    ${WINGS.replace('class="mark"', 'class="mark hero__mark"')}
-    <div class="wrap hero__grid">
-      <div>
-        <h1 class="hero__h1"><span class="hero__line"><span data-i18n="home.h1a">${esc(nl('home.h1a'))}</span><em data-i18n="home.h1b">${esc(nl('home.h1b'))}</em><span data-i18n="home.h1c">${esc(nl('home.h1c'))}</span></span></h1>
-        ${T('home.lede', 'p', 'class="lede hero__lede" data-hero="1"')}
-        <div class="btn-row" data-hero="2">
-          <a class="btn btn--signal" href="voeders.html" data-i18n="ui.exploreRange">${esc(nl('ui.exploreRange'))}</a>
-          <a class="btn btn--outline" href="verkooppunten.html" data-i18n="ui.findDealer">${esc(nl('ui.findDealer'))}</a>
-        </div>
-        <div class="facts" data-hero="3">
-          <div class="fact"><b class="fact__n" data-count="45" data-dec="0">45</b>${T('home.fact1', 'span', 'class="fact__t"')}</div>
-          <div class="fact"><b class="fact__n" data-count="${FEEDS.length + SUPPLEMENTS.length + EQUIPMENT.length}" data-dec="0">${FEEDS.length + SUPPLEMENTS.length + EQUIPMENT.length}</b>${T('home.fact2', 'span', 'class="fact__t"')}</div>
-          <div class="fact"><b class="fact__n" data-count="11" data-dec="0">11</b>${T('home.fact3', 'span', 'class="fact__t"')}</div>
-          <div class="fact"><b class="fact__n" data-count="5166" data-dec="0">${N(5166, 0)}</b>${T('home.fact4', 'span', 'class="fact__t"')}</div>
-        </div>
+  return `  <section class="hero hero--grain on-dark">
+    <div class="hero-grain__media" aria-hidden="true">
+      <img src="assets/products/${first.img}.jpg" alt="" width="700" height="525" fetchpriority="high">
+    </div>
+    <div class="wrap hero-grain__inner">
+      <h1 class="hero__h1">
+        <span class="hero__line">${T('home.h1a')}</span>
+        <span class="hero__line"><span><em data-i18n="home.h1b">${esc(nl('home.h1b'))}</em>${T('home.heroPunctuation')}</span></span>
+        <span class="hero__line">${T('home.heroFinal')}</span>
+      </h1>
+      ${T('home.lede', 'p', 'class="lede hero__lede"')}
+      <div class="btn-row">
+        <a class="btn btn--signal" href="voeders.html" data-i18n="ui.exploreRange">${esc(nl('ui.exploreRange'))}</a>
+        <a class="btn btn--outline" href="verkooppunten.html" data-i18n="ui.findDealer">${esc(nl('ui.findDealer'))}</a>
       </div>
-
-      <div class="analyser" data-hero="2" aria-label="${esc(nl('home.analyserTitle'))}">
-        <div class="analyser__head">
-          <span class="analyser__title"><span class="analyser__dot"></span>${T('home.analyserTitle', 'span', 'class="field-label"')}</span>
-          ${T('home.analyserLive', 'span', 'class="field-label"')}
-        </div>
-        <figure class="analyser__figure">
-          <img src="assets/products/${first.img}.jpg" alt="${esc(NL.p[first.slug].name)}" width="700" height="525" fetchpriority="high">
-          <img class="analyser__next" src="assets/products/${first.img}.jpg" alt="" aria-hidden="true" width="700" height="525">
-          <figcaption class="analyser__name">
-            <div>
-              <p class="analyser__product">${esc(NL.p[first.slug].name)}</p>
-              <p class="analyser__phases">${first.phases.map((p) => esc(nl('phase.' + p))).join(' · ')}</p>
-            </div>
-          </figcaption>
-        </figure>
-        <div class="analyser__body">
-          ${macroBar(first.macro, { large: true, reveal: false })}
-          <div class="analyser__figures">
-            <div><span class="field-label">${esc(nl('spec.energy'))}</span><b>${first.macro.kcal}</b><span class="field-label">${esc(nl('spec.kcalUnit'))}</span></div>
-            <div><span class="field-label">${esc(nl('spec.absorbable'))}</span><b>${num(first.macro.absorbable)}%</b></div>
-            <div><span class="field-label">${esc(nl('spec.omega'))}</span><b>${num(first.macro.omega)} : 1</b></div>
-          </div>
-        </div>
-        <div class="analyser__tabs" role="tablist" aria-label="${esc(nl('home.analyserHint'))}">
-          ${tabs}
-        </div>
+    </div>
+    <div class="hero-grain__strip">
+      <div class="wrap hero-grain__striprow">
+        <p class="hero-grain__now">${T('home.featuredLabel')} <a href="voeders.html#${first.slug}">${T('p.' + first.slug + '.name', 'b')}</a></p>
+        <div class="hero-grain__macro">${countable(macroBar(first.macro))}</div>
+        <div class="hero-grain__energy">${T('spec.energy', 'span', 'class="field-label"')}<strong>${countable(N(first.macro.kcal, 0))} <small>${T('spec.kcalUnit')}</small></strong></div>
       </div>
     </div>
   </section>
@@ -504,7 +477,10 @@ function homeBody() {
           ${T('home.seasonLede', 'p', 'class="lede"')}
         </div>
       </div>
-      <div class="season" data-stagger>${seasonSteps}
+      <div class="season-timeline" data-season-timeline>
+        <div class="season-timeline__rail" aria-hidden="true"><span></span></div>
+        <div class="season-timeline__row">${seasonSteps}
+        </div>
       </div>
     </div>
   </section>
@@ -522,8 +498,8 @@ function homeBody() {
       </div>
       <div>
         <h3 data-i18n="home.conceptCompare">${esc(nl('home.conceptCompare'))}</h3>
-        <div class="mix-overview" data-stagger>
-          ${compareSet.map((f) => `<a class="mix-overview__item" href="voeders.html#${f.slug}" data-rise>
+        <div class="mix-overview" data-profile-group>
+          ${compareSet.map((f) => `<a class="mix-overview__item" href="voeders.html#${f.slug}">
             <div style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:0.55rem">
               <b style="font-weight:650" data-i18n="p.${f.slug}.name">${esc(NL.p[f.slug].name)}</b>
               <span class="field-label">${N(f.macro.kcal, 0)} ${esc(nl('spec.kcalUnit'))}</span>

@@ -275,8 +275,19 @@
 
     hero.classList.add('is-armed');
     var release = function () {
+      if (hero.classList.contains('anim-in')) return;
       hero.classList.add('anim-in');
-      setTimeout(function () { countFacts(hero); }, 520);
+      hero.classList.remove('is-armed');
+      setTimeout(function () { countFacts(hero); }, 380);
+      var track = $('.hero-grain__macro .macro__track', hero);
+      if (track && !reduced.matches && track.animate) {
+        var draw = track.animate([
+          { clipPath: 'inset(0 100% 0 0 round 99px)' },
+          { clipPath: 'inset(0 0 0 0 round 99px)' }
+        ], { duration: 1100, delay: 520, easing: 'cubic-bezier(0.16,1,0.3,1)', fill: 'backwards' });
+        window.addEventListener('beforeprint', function () { draw.cancel(); });
+        reduced.addEventListener('change', function (event) { if (event.matches) draw.cancel(); });
+      }
     };
     requestAnimationFrame(function () { requestAnimationFrame(release); });
     /* If rAF never runs (hidden tab, headless render) nothing stays hidden. */
@@ -291,8 +302,9 @@
       if (isNaN(target)) return;
       if (reduced.matches) { el.textContent = fmt(target, dec); return; }
 
-      var begun = null, dur = 1200;
+      var begun = null, dur = 1100;
       function step(now) {
+        if (reduced.matches || document.hidden) { el.textContent = fmt(target, dec); return; }
         if (begun === null) begun = now;
         var p = Math.min((now - begun) / dur, 1);
         el.textContent = fmt(target * (1 - Math.pow(1 - p, 5)), dec);
@@ -621,13 +633,13 @@
     }
 
     input.addEventListener('input', debounce(run, 120));
-    if (clear) {
-      clear.addEventListener('click', function () {
+    [clear, $('[data-reset]')].filter(Boolean).forEach(function (reset) {
+      reset.addEventListener('click', function () {
         input.value = '';
         run();
         input.focus();
       });
-    }
+    });
     document.addEventListener('aidi:lang', run);
     run();
   }
@@ -728,9 +740,10 @@
 
   function initReveal() {
     tagTextReveals();
-    var targets = $$('[data-rise]');
+    // Profile rows stay visible while their bars draw, just like Hero C.
+    var targets = $$('[data-rise]').filter(function (el) { return !$('.macro__track', el); });
     var masks = $$('[data-rise-mask]');
-    var bars = $$('.macro__track[data-reveal]');
+    var bars = []; // Nutrient segments animate independently, like demo Hero C.
     if (!('IntersectionObserver' in window)) return;
 
     var fold = window.innerHeight * 0.92;
@@ -809,6 +822,56 @@
     }, 1500);
   }
 
+  /* Hero C's segment growth, reused for every nutritional bar. The default
+     is fully drawn; WAAPI supplies the temporary entrance only when visible. */
+  function initProfileMotion() {
+    if (reduced.matches || !('IntersectionObserver' in window) || !Element.prototype.animate) return;
+    var animations = new Set();
+    function animate(el, frames, options) {
+      var animation = el.animate(frames, options);
+      animations.add(animation);
+      animation.onfinish = animation.oncancel = function () { animations.delete(animation); };
+    }
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var target = entry.target;
+        observer.unobserve(target);
+        if (target.hasAttribute('data-season-timeline')) {
+          var axis = window.matchMedia('(min-width: 820px)').matches ? 'X' : 'Y';
+          animate($('.season-timeline__rail span', target), [
+            { transform: 'scale' + axis + '(0)' }, { transform: 'scale' + axis + '(1)' }
+          ], { duration: 1400, delay: 200, easing: 'cubic-bezier(0.16,1,0.3,1)', fill: 'backwards' });
+          $$('.season-timeline__node', target).forEach(function (node, i) {
+            animate(node, [{ borderColor: 'var(--line)' }, { borderColor: 'var(--signal-ink)' }],
+              { duration: 400, delay: 400 + i * 320, easing: 'cubic-bezier(0.16,1,0.3,1)', fill: 'backwards' });
+            animate($('i', node), [{ backgroundColor: 'var(--line)' }, { backgroundColor: 'var(--signal-ink)' }],
+              { duration: 400, delay: 400 + i * 320, easing: 'cubic-bezier(0.16,1,0.3,1)', fill: 'backwards' });
+          });
+        } else {
+          var delay = 260 + Number(target.dataset.profileIndex || 0) * 60;
+          $$('.macro__seg', target).forEach(function (segment) {
+            animate(segment, [{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }],
+              { duration: 800, delay: delay, easing: 'cubic-bezier(0.16,1,0.3,1)', fill: 'backwards' });
+          });
+        }
+      });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.15 });
+    $$('[data-profile-group], #feed-list').forEach(function (group) {
+      $$('.macro__track', group).forEach(function (track, index) { track.dataset.profileIndex = index; });
+    });
+    $$('.macro__track, [data-season-timeline]').forEach(function (target) {
+      if (!target.closest('.hero')) observer.observe(target);
+    });
+    function finish() {
+      observer.disconnect();
+      animations.forEach(function (animation) { animation.cancel(); });
+      animations.clear();
+    }
+    window.addEventListener('beforeprint', finish);
+    reduced.addEventListener('change', function (event) { if (event.matches) finish(); });
+  }
+
   /* ------------------------------------------------- deep-linked details -- */
 
   function initDeepLink() {
@@ -842,7 +905,7 @@
     /* Each feature is isolated: if one throws on a page that does not carry it,
        navigation, language switching and the rest still come up. */
     [applyLangSafe, initHeader, initLangMenu, initHero, initAnalyser, initFilters,
-     initCompare, initDealerSearch, initNearbyDealers, initReveal, initDeepLink].forEach(function (fn) {
+     initCompare, initDealerSearch, initNearbyDealers, initReveal, initProfileMotion, initDeepLink].forEach(function (fn) {
       try { fn(); } catch (e) {
         if (window.console && console.warn) console.warn('AIDI: ' + fn.name + ' failed', e);
       }
