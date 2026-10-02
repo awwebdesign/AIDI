@@ -112,12 +112,17 @@ Motion never gates content. `script.js` adds text reveal states with observer
 fallbacks and a `beforeprint` release. Nutrient bars use Hero C's animation:
 each segment grows from its left edge over 800ms, with a 260ms lead-in and
 a fixed 60ms stagger per product. Profile rows remain visible during the draw.
+Segments are prepared at their empty first frame and paused until they enter
+the viewport, so the completed bars never flash before drawing. Print and
+reduced-motion changes release both playing and offscreen paused effects.
 Hero A uses its own 1100ms bar wipe after 520ms, with figures counting over
 1100ms after 380ms, and 900ms headline reveals spaced by 90ms.
 The timeline draws over 1400ms and lights its nodes
 in sequence. These use temporary Web Animations effects over fully visible
 default styles. Reduced motion skips the segment growth, rail drawing and
 hero photo zoom; printing cancels any active data animations.
+Hero line wrappers retain `display: block` throughout the reveal: changing
+them back to inline text would stop the vertical transforms from rendering.
 
 Layout properties are not animated. The header keeps a constant height and
 scales the wordmark with a transform instead.
