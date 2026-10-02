@@ -827,12 +827,16 @@
   function initProfileMotion() {
     if (reduced.matches || !('IntersectionObserver' in window) || !Element.prototype.animate) return;
     var animations = new Set();
+    var prepared = new Map();
+    var observerReported = false;
     function animate(el, frames, options) {
       var animation = el.animate(frames, options);
       animations.add(animation);
       animation.onfinish = animation.oncancel = function () { animations.delete(animation); };
+      return animation;
     }
     var observer = new IntersectionObserver(function (entries) {
+      observerReported = true;
       entries.forEach(function (entry) {
         if (!entry.isIntersecting) return;
         var target = entry.target;
@@ -849,11 +853,8 @@
               { duration: 400, delay: 400 + i * 320, easing: 'cubic-bezier(0.16,1,0.3,1)', fill: 'backwards' });
           });
         } else {
-          var delay = 260 + Number(target.dataset.profileIndex || 0) * 60;
-          $$('.macro__seg', target).forEach(function (segment) {
-            animate(segment, [{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }],
-              { duration: 800, delay: delay, easing: 'cubic-bezier(0.16,1,0.3,1)', fill: 'backwards' });
-          });
+          (prepared.get(target) || []).forEach(function (animation) { animation.play(); });
+          prepared.delete(target);
         }
       });
     }, { rootMargin: '0px 0px -12% 0px', threshold: 0.15 });
@@ -861,15 +862,30 @@
       $$('.macro__track', group).forEach(function (track, index) { track.dataset.profileIndex = index; });
     });
     $$('.macro__track, [data-season-timeline]').forEach(function (target) {
-      if (!target.closest('.hero')) observer.observe(target);
+      if (target.closest('.hero')) return;
+      if (target.classList.contains('macro__track')) {
+        // Hold the empty start frame before scrolling, exactly like the demo.
+        // This avoids flashing the completed bar before it draws.
+        var delay = 260 + Number(target.dataset.profileIndex || 0) * 60;
+        prepared.set(target, $$('.macro__seg', target).map(function (segment) {
+          var animation = animate(segment, [{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }],
+            { duration: 800, delay: delay, easing: 'cubic-bezier(0.16,1,0.3,1)', fill: 'backwards' });
+          animation.pause();
+          animation.currentTime = 0;
+          return animation;
+        }));
+      }
+      observer.observe(target);
     });
     function finish() {
       observer.disconnect();
       animations.forEach(function (animation) { animation.cancel(); });
       animations.clear();
+      prepared.clear();
     }
     window.addEventListener('beforeprint', finish);
     reduced.addEventListener('change', function (event) { if (event.matches) finish(); });
+    setTimeout(function () { if (!observerReported) finish(); }, 1800);
   }
 
   /* ------------------------------------------------- deep-linked details -- */

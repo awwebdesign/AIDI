@@ -1466,8 +1466,8 @@ table.feeder-specs th:first-child, table.feeder-specs td:first-child { min-width
    any second set of selectors fighting these on specificity. */
 
 .hero__h1 .hero__line { display: block; overflow: hidden; }
+.hero__h1 .hero__line > * { display: block; }
 .js .hero.is-armed .hero__h1 .hero__line > * {
-  display: inline-block;
   transform: translateY(var(--travel-line, 105%));
   opacity: var(--held-opacity, 1);
 }
