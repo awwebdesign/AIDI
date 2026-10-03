@@ -1404,6 +1404,10 @@ table.feeder-specs th:first-child, table.feeder-specs td:first-child { min-width
 .nearby .btn:disabled { opacity: 0.65; cursor: wait; }
 .dealer__distance { font-size: var(--small); font-weight: 650; color: var(--navy); margin-bottom: 0.65rem; }
 .nearby .arrow-link { margin-top: 1rem; }
+/* A typed town with no stockist of its own falls back to the nearest ones. */
+.nearby--search { margin-block: 1.25rem 0; }
+.nearby--search > p { margin: 0; color: var(--ink); font-weight: 600; }
+.nearby--search .dealers:empty { display: none; }
 .dealer__links a { overflow-wrap: anywhere; }
 
 /* ----------------------------------------------------------- 29. contact -- */
@@ -1610,6 +1614,10 @@ table.feeder-specs th:first-child, table.feeder-specs td:first-child { min-width
   justify-content: center;
 }
 .hero-grain__media { position: absolute; inset: 0; z-index: -2; overflow: hidden; }
+.hero-grain__media picture { display: contents; }
+/* A 2560px texture grown from the Mix 3 photo at its native sharpness, so the
+   grain is never upscaled. Regenerate it with hero-texture.py rather
+   than enlarging the 700px product shot. */
 .hero-grain__media img { width: 100%; height: 100%; object-fit: cover; }
 .hero--grain::before {
   content: ''; position: absolute; inset: 0; z-index: -1;

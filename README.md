@@ -29,6 +29,7 @@ assets/maps.json    Simplified country outlines for the map proposals
 
 build.mjs           Development tool: regenerates the HTML. See below.
 geocode.mjs         Development tool: looks up a coordinate per dealer.
+hero-texture.py     Development tool: grows the sharp 2560px hero grain texture.
 demos.html          Design proposals: hero and season section (not linked).
 demos-kaart.html    Design proposals: stockists on a map (not linked).
 demos.css/.js       Styles and behaviour for those proposal pages only.

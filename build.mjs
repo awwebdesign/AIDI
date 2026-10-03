@@ -446,7 +446,10 @@ function homeBody() {
 
   return `  <section class="hero hero--grain on-dark">
     <div class="hero-grain__media" aria-hidden="true">
-      <img src="assets/products/${first.img}.jpg" alt="" width="700" height="525" fetchpriority="high">
+      <picture>
+        <source srcset="assets/products/hero-grain.webp" type="image/webp">
+        <img src="assets/products/hero-grain.jpg" alt="" width="2560" height="1440" fetchpriority="high">
+      </picture>
     </div>
     <div class="wrap hero-grain__inner">
       <h1 class="hero__h1">
@@ -945,6 +948,10 @@ ${list.map(dealerCard).join('\n')}
           <button type="button" class="search__clear" aria-label="${esc(nl('ui.clear'))}" data-i18n-attr="aria-label:ui.clear" hidden>${ICON.x}</button>
         </div>
         <span class="filters__count" data-count></span>
+      </div>
+      <div class="nearby nearby--search" data-search-nearby hidden>
+        <p data-search-status role="status" aria-live="polite"></p>
+        <div class="dealers" data-search-results></div>
       </div>
 
 ${groups}

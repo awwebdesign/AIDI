@@ -627,6 +627,57 @@
     var empty = $('[data-empty]');
     var counter = $('[data-count]');
     var clear = $('.search__clear');
+    var fallback = $('[data-search-nearby]');
+    var fallbackStatus = fallback && $('[data-search-status]', fallback);
+    var fallbackList = fallback && $('[data-search-results]', fallback);
+    var lookupTimer = null, lookupSeq = 0, lookingFor = '', place = null;
+
+    /* No stockist matches the text: treat it as a town or postcode and show
+       the three closest stockists instead of an empty list. */
+    function showFallback() {
+      fallbackStatus.textContent = place
+        ? t('verkooppunten.searchNearest').replace('{place}', place.name)
+        : t('verkooppunten.searchLooking').replace('{place}', lookingFor);
+      if (place) renderNearest(fallbackList, nearestDealers(place.lat, place.lon));
+      else fallbackList.replaceChildren();
+      fallback.hidden = false;
+      if (empty) empty.hidden = true;
+    }
+
+    function updateFallback(q, shown) {
+      if (!fallback) return;
+      clearTimeout(lookupTimer);
+      if (shown !== 0 || q.length < 3) {
+        lookupSeq++;
+        lookingFor = '';
+        place = null;
+        fallback.hidden = true;
+        return;
+      }
+      if (q === lookingFor) {
+        /* Same text again (a language switch re-runs the filter). */
+        if (place === false) { fallback.hidden = true; return; }
+        showFallback();
+        return;
+      }
+      var seq = ++lookupSeq;
+      lookingFor = q;
+      place = null;
+      showFallback();
+      lookupTimer = setTimeout(function () {
+        findPlace(q).then(function (hit) {
+          if (seq !== lookupSeq) return;
+          if (!hit) {
+            place = false;
+            fallback.hidden = true;
+            if (empty) empty.hidden = false;
+            return;
+          }
+          place = hit;
+          showFallback();
+        });
+      }, 450);
+    }
 
     function run() {
       var q = input.value.trim().toLowerCase();
@@ -646,6 +697,7 @@
       if (empty) empty.hidden = shown !== 0;
       if (counter) counter.textContent = shown + ' ' + t(shown === 1 ? 'ui.dealersOne' : 'ui.dealers');
       if (clear) clear.hidden = q === '';
+      updateFallback(input.value.trim(), shown);
     }
 
     input.addEventListener('input', debounce(run, 120));
@@ -660,6 +712,75 @@
     run();
   }
 
+  /* The three dealers closest to a point, using the shipped coordinates. */
+  function nearestDealers(lat, lon) {
+    var rad = Math.PI / 180;
+    return $$('.country-group .dealer[data-lat][data-lon]').map(function (card) {
+      var targetLat = Number(card.dataset.lat);
+      var targetLon = Number(card.dataset.lon);
+      var a = Math.pow(Math.sin((targetLat - lat) * rad / 2), 2) +
+        Math.cos(lat * rad) * Math.cos(targetLat * rad) * Math.pow(Math.sin((targetLon - lon) * rad / 2), 2);
+      return { card: card, distance: 6371 * 2 * Math.asin(Math.sqrt(Math.min(1, a))) };
+    }).sort(function (a, b) { return a.distance - b.distance; }).slice(0, 3);
+  }
+
+  function renderNearest(output, ranked) {
+    output.replaceChildren();
+    ranked.forEach(function (result, index) {
+      var card = result.card.cloneNode(true);
+      card.hidden = false;
+      card.removeAttribute('data-find');
+      var distance = document.createElement('p');
+      distance.className = 'dealer__distance';
+      distance.textContent = (index === 0 ? t('verkooppunten.nearest') + ' · ' : '') +
+        fmt(result.distance, 1) + ' km ' + t('verkooppunten.straightLine');
+      card.prepend(distance);
+      var route = document.createElement('a');
+      route.className = 'arrow-link';
+      route.textContent = t('verkooppunten.route');
+      route.href = 'https://www.google.com/maps/dir/?api=1&destination=' +
+        encodeURIComponent(result.card.dataset.lat + ',' + result.card.dataset.lon);
+      route.target = '_blank';
+      route.rel = 'noopener noreferrer';
+      card.appendChild(route);
+      output.appendChild(card);
+    });
+  }
+
+  /* A town or postcode typed into the search, looked up on OpenStreetMap
+     (the same source as geocode.mjs). Only called when the list itself has
+     no match, after typing pauses, and each answer is cached for the page. */
+  var placeCache = {};
+  var DEALER_COUNTRIES = 'be,nl,de,fr,gb,it,hu,hr,us,cz,pl';
+
+  function findPlace(q) {
+    var key = q.toLowerCase();
+    if (placeCache[key]) return placeCache[key];
+    var base = 'https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&addressdetails=1&accept-language=' + current;
+    function ask(params) {
+      return fetch(base + '&' + params).then(function (res) { return res.ok ? res.json() : []; });
+    }
+    var lookup;
+    if (/^\d{4}$/.test(q)) {
+      /* A bare four-digit postcode is Belgian first, then Dutch. */
+      lookup = ask('countrycodes=be&postalcode=' + q).then(function (hits) {
+        return hits.length ? hits : ask('countrycodes=nl&postalcode=' + q);
+      });
+    } else {
+      /* Biased towards Belgium and the Netherlands, where most stockists are. */
+      lookup = ask('countrycodes=' + DEALER_COUNTRIES + '&viewbox=2.3,53.7,7.4,49.4&q=' + encodeURIComponent(q));
+    }
+    placeCache[key] = lookup.then(function (hits) {
+      if (!hits.length) return null;
+      var hit = hits[0], a = hit.address || {};
+      return {
+        lat: Number(hit.lat), lon: Number(hit.lon),
+        name: a.village || a.town || a.city || a.municipality || hit.name || q
+      };
+    }).catch(function () { delete placeCache[key]; return null; });
+    return placeCache[key];
+  }
+
   /* Nearby recommendations use the shipped dealer coordinates. Location is
      requested only on click and kept in memory for this page. */
   function initNearbyDealers() {
@@ -667,32 +788,12 @@
     if (!button) return;
     var output = $('[data-nearby]');
     var status = $('[data-location-status]');
-    var candidates = $$('.country-group .dealer[data-lat][data-lon]');
     var ranked = [];
     var statusKey = '';
 
     function render() {
       status.textContent = statusKey ? t('verkooppunten.' + statusKey) : '';
-      output.replaceChildren();
-      ranked.forEach(function (result, index) {
-        var card = result.card.cloneNode(true);
-        card.hidden = false;
-        card.removeAttribute('data-find');
-        var distance = document.createElement('p');
-        distance.className = 'dealer__distance';
-        distance.textContent = (index === 0 ? t('verkooppunten.nearest') + ' · ' : '') +
-          fmt(result.distance, 1) + ' km ' + t('verkooppunten.straightLine');
-        card.prepend(distance);
-        var route = document.createElement('a');
-        route.className = 'arrow-link';
-        route.textContent = t('verkooppunten.route');
-        route.href = 'https://www.google.com/maps/dir/?api=1&destination=' +
-          encodeURIComponent(result.card.dataset.lat + ',' + result.card.dataset.lon);
-        route.target = '_blank';
-        route.rel = 'noopener noreferrer';
-        card.appendChild(route);
-        output.appendChild(card);
-      });
+      renderNearest(output, ranked);
       output.hidden = !ranked.length;
     }
 
@@ -705,16 +806,7 @@
       statusKey = 'locating';
       render();
       navigator.geolocation.getCurrentPosition(function (position) {
-        var rad = Math.PI / 180;
-        var lat = position.coords.latitude;
-        var lon = position.coords.longitude;
-        ranked = candidates.map(function (card) {
-          var targetLat = Number(card.dataset.lat);
-          var targetLon = Number(card.dataset.lon);
-          var a = Math.pow(Math.sin((targetLat - lat) * rad / 2), 2) +
-            Math.cos(lat * rad) * Math.cos(targetLat * rad) * Math.pow(Math.sin((targetLon - lon) * rad / 2), 2);
-          return { card: card, distance: 6371 * 2 * Math.asin(Math.sqrt(Math.min(1, a))) };
-        }).sort(function (a, b) { return a.distance - b.distance; }).slice(0, 3);
+        ranked = nearestDealers(position.coords.latitude, position.coords.longitude);
         statusKey = ranked.length ? 'locationFound' : 'locationUnavailable';
         button.disabled = false;
         render();
