@@ -12,7 +12,22 @@
   var LOCALES = { nl: 'nl-BE', fr: 'fr-BE', en: 'en-GB', de: 'de-DE', zh: 'zh-Hans-CN' };
   var html = document.documentElement;
   var page = document.body.getAttribute('data-page') || 'home';
-  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  /* Review switch: open any page with ?motion=on (or ?motion=off to undo) to
+     play the animations even when the OS has animation effects switched off.
+     Visitors never see this; without the parameter the OS preference rules. */
+  var forceMotion = false;
+  var mq = /[?&]motion=(on|off)/.exec(location.search);
+  if (mq) forceMotion = mq[1] === 'on';
+  try {
+    if (mq) sessionStorage.setItem('aidi.motion', mq[1]);
+    else forceMotion = sessionStorage.getItem('aidi.motion') === 'on';
+  } catch (e) {}
+  if (forceMotion) html.setAttribute('data-motion', 'on');
+  var reduced = {
+    get matches() { return motionQuery.matches && !forceMotion; },
+    addEventListener: function (t, fn) { motionQuery.addEventListener(t, fn); }
+  };
 
   /* ------------------------------------------------------------ helpers -- */
 
