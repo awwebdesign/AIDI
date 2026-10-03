@@ -1279,9 +1279,9 @@ th[aria-sort='ascending'] .sortable svg { transform: rotate(180deg); }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  /* Scoped so the design-proposal pages can preview the motion on a machine
-     where the OS has effects switched off. Nothing on the live site sets
-     data-motion, so visitors always get the reduced treatment. */
+  /* Scoped to data-motion, which script.js sets to 'on' by default so the
+     entrance animations play even where the OS has effects switched off.
+     ?motion=off on any page removes it to preview the reduced treatment. */
   :root:not([data-motion='on']) *,
   :root:not([data-motion='on']) *::before,
   :root:not([data-motion='on']) *::after {
@@ -1659,7 +1659,7 @@ table.feeder-specs th:first-child, table.feeder-specs td:first-child { min-width
   .season-timeline__node { top: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .hero--grain.anim-in .hero-grain__media img { animation: none; }
+  :root:not([data-motion='on']) .hero--grain.anim-in .hero-grain__media img { animation: none; }
 }
 @media print {
   .hero--grain.anim-in .hero-grain__media img { animation: none; }
